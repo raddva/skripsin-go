@@ -4,51 +4,71 @@ import "fmt"
 
 const nMax = 100
 
+// Struktur data untuk menyimpan informasi tentang mahasiswa
 type Mahasiswa struct {
 	NIM, Name, DosBing string
 	IsGraduated        bool
 }
 
+// Struktur data untuk menyimpan informasi tentang skripsi
 type Skripsi struct {
 	ID, Year int
 	Title    string
 	Author   Mahasiswa
 }
 
+// Tipe data untuk menyimpan daftar skripsi dan daftar mahasiswa
 type SkripsiList [nMax]Skripsi
 type MahasiswaList [nMax]Mahasiswa
 
-func addSkripsi() {
+// Prosedur untuk menambah data skripsi beserta data mahasiswa yang terkait
+func addSkripsi(s *SkripsiList, m *MahasiswaList) {
 }
 
-func updateSkripsi() {
+// Prosedur untuk mengupdate data skripsi berdasarkan ID
+func updateSkripsi(s *SkripsiList, m *MahasiswaList, id int) {
 }
 
-func deleteSkripsi() {
+// Prosedur untuk menghapus data skripsi berdasarkan ID
+func deleteSkripsi(s *SkripsiList, id int) {
 }
 
-func getSkripsi() {
+// Prosedur untuk menampilkan semua data skripsi
+func getAllSkripsi(s SkripsiList, m MahasiswaList) {
 }
 
-func findSkripsiSequential() {
+// Prosedur untuk menampilkan data skripsi berdasarkan ID
+func getSkripsi(s SkripsiList, id int) {
 }
 
-func findSkripsiBinary() {
+// Fungsi untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan sequential search
+func findSkripsiSequential(s SkripsiList, keyword string) int {
+	return 0
 }
 
-func sortSkripsiSelection() {
+// Fungsi untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan binary search
+func findSkripsiBinary(s SkripsiList, keyword string) int {
+	return 0
 }
 
-func sortSkripsiInsertion() {
+// Prosedur untuk mengurutkan skripsi berdasarkan ID menggunakan selection sort
+func sortSkripsiSelection(s *SkripsiList, sortType string) {
 }
 
-func statisticSkripsi() {
+// Prosedur untuk mengurutkan skripsi berdasarkan ID menggunakan insertion sort
+func sortSkripsiInsertion(s *SkripsiList, sortType string) {
 }
 
+// Prosedur untuk menampilkan statistik skripsi, seperti jumlah skripsi per tahun, jumlah skripsi yang lulus, dll
+func statisticSkripsi(s SkripsiList, m MahasiswaList) {
+}
+
+// Menu utama untuk menjalankan program
 func main() {
-	var mainChoice, subChoice int
-	// var s SkripsiList
-	// var m MahasiswaList
+	var mainChoice, subChoice, id int
+	var keyword, sortType string
+	var s SkripsiList
+	var m MahasiswaList
 
 	for {
 		fmt.Println("+================================================================+")
@@ -66,6 +86,7 @@ func main() {
 		if mainChoice == 5 {
 			return
 		}
+
 		switch mainChoice {
 		case 1:
 			fmt.Println("+===========================+")
@@ -82,11 +103,17 @@ func main() {
 			}
 			switch subChoice {
 			case 1:
-				addSkripsi()
+				addSkripsi(&s, &m)
 			case 2:
-				updateSkripsi()
+				fmt.Print("Masukkan keyword pencarian: ")
+				fmt.Scan(&keyword)
+				id = findSkripsiSequential(s, keyword)
+				updateSkripsi(&s, &m, id)
 			case 3:
-				deleteSkripsi()
+				fmt.Print("Masukkan keyword pencarian: ")
+				fmt.Scan(&keyword)
+				id = findSkripsiSequential(s, keyword)
+				deleteSkripsi(&s, id)
 			default:
 				return
 			}
@@ -104,9 +131,13 @@ func main() {
 			}
 			switch subChoice {
 			case 1:
-				findSkripsiSequential()
+				fmt.Print("Masukkan keyword pencarian: ")
+				fmt.Scan(&keyword)
+				findSkripsiSequential(s, keyword)
 			case 2:
-				findSkripsiBinary()
+				fmt.Print("Masukkan keyword pencarian: ")
+				fmt.Scan(&keyword)
+				findSkripsiBinary(s, keyword)
 			default:
 				return
 			}
@@ -124,9 +155,13 @@ func main() {
 			}
 			switch subChoice {
 			case 1:
-				sortSkripsiSelection()
+				fmt.Print("Masukkan tipe pengurutan (asc/desc): ")
+				fmt.Scan(&sortType)
+				sortSkripsiSelection(&s, sortType)
 			case 2:
-				sortSkripsiInsertion()
+				fmt.Print("Masukkan tipe pengurutan (asc/desc): ")
+				fmt.Scan(&sortType)
+				sortSkripsiInsertion(&s, sortType)
 			default:
 				return
 			}
@@ -134,7 +169,7 @@ func main() {
 			fmt.Println("+===========================+")
 			fmt.Printf("%-5s%-23s%-5s\n", "+", "Statistik Skripsi", "+")
 			fmt.Println("+===========================+")
-			statisticSkripsi()
+			statisticSkripsi(s, m)
 			continue
 		case 5:
 			return
