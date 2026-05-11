@@ -22,7 +22,7 @@ type SkripsiList [nMax]Skripsi
 type MahasiswaList [nMax]Mahasiswa
 
 // Prosedur untuk menambah data skripsi beserta data mahasiswa yang terkait
-func addSkripsi(s *SkripsiList, m *MahasiswaList) {
+func addSkripsi(s *SkripsiList, n *int, m *MahasiswaList) {
 }
 
 // Prosedur untuk mengupdate data skripsi berdasarkan ID
@@ -30,42 +30,42 @@ func updateSkripsi(s *SkripsiList, m *MahasiswaList, id int) {
 }
 
 // Prosedur untuk menghapus data skripsi berdasarkan ID
-func deleteSkripsi(s *SkripsiList, id int) {
+func deleteSkripsi(s *SkripsiList, n *int, id int) {
 }
 
 // Prosedur untuk menampilkan semua data skripsi
-func getAllSkripsi(s SkripsiList, m MahasiswaList) {
+func getAllSkripsi(s SkripsiList, n int, m MahasiswaList) {
 }
 
 // Prosedur untuk menampilkan data skripsi berdasarkan ID
-func getSkripsi(s SkripsiList, id int) {
+func getSkripsi(s SkripsiList, n int, id int) {
 }
 
 // Fungsi untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan sequential search
-func findSkripsiSequential(s SkripsiList, keyword string) int {
+func findSkripsiSequential(s SkripsiList, n int, keyword string) int {
 	return 0
 }
 
 // Fungsi untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan binary search
-func findSkripsiBinary(s SkripsiList, keyword string) int {
+func findSkripsiBinary(s SkripsiList, n int, keyword string) int {
 	return 0
 }
 
 // Prosedur untuk mengurutkan skripsi berdasarkan ID menggunakan selection sort
-func sortSkripsiSelection(s *SkripsiList, sortType string) {
+func sortSkripsiSelection(s *SkripsiList, n int, sortType string) {
 }
 
 // Prosedur untuk mengurutkan skripsi berdasarkan ID menggunakan insertion sort
-func sortSkripsiInsertion(s *SkripsiList, sortType string) {
+func sortSkripsiInsertion(s *SkripsiList, n int, sortType string) {
 }
 
 // Prosedur untuk menampilkan statistik skripsi, seperti jumlah skripsi per tahun, jumlah skripsi yang lulus, dll
-func statisticSkripsi(s SkripsiList, m MahasiswaList) {
+func statisticSkripsi(s SkripsiList, n int, m MahasiswaList) {
 }
 
 // Menu utama untuk menjalankan program
 func main() {
-	var mainChoice, subChoice, id int
+	var mainChoice, subChoice, id, n int
 	var keyword, sortType string
 	var s SkripsiList
 	var m MahasiswaList
@@ -103,17 +103,17 @@ func main() {
 			}
 			switch subChoice {
 			case 1:
-				addSkripsi(&s, &m)
+				addSkripsi(&s, &n, &m)
 			case 2:
 				fmt.Print("Masukkan keyword pencarian: ")
 				fmt.Scan(&keyword)
-				id = findSkripsiSequential(s, keyword)
+				id = findSkripsiSequential(s, n, keyword)
 				updateSkripsi(&s, &m, id)
 			case 3:
 				fmt.Print("Masukkan keyword pencarian: ")
 				fmt.Scan(&keyword)
-				id = findSkripsiSequential(s, keyword)
-				deleteSkripsi(&s, id)
+				id = findSkripsiSequential(s, n, keyword)
+				deleteSkripsi(&s, &n, id)
 			default:
 				return
 			}
@@ -133,11 +133,11 @@ func main() {
 			case 1:
 				fmt.Print("Masukkan keyword pencarian: ")
 				fmt.Scan(&keyword)
-				findSkripsiSequential(s, keyword)
+				findSkripsiSequential(s, n, keyword)
 			case 2:
 				fmt.Print("Masukkan keyword pencarian: ")
 				fmt.Scan(&keyword)
-				findSkripsiBinary(s, keyword)
+				findSkripsiBinary(s, n, keyword)
 			default:
 				return
 			}
@@ -157,11 +157,11 @@ func main() {
 			case 1:
 				fmt.Print("Masukkan tipe pengurutan (asc/desc): ")
 				fmt.Scan(&sortType)
-				sortSkripsiSelection(&s, sortType)
+				sortSkripsiSelection(&s, n, sortType)
 			case 2:
 				fmt.Print("Masukkan tipe pengurutan (asc/desc): ")
 				fmt.Scan(&sortType)
-				sortSkripsiInsertion(&s, sortType)
+				sortSkripsiInsertion(&s, n, sortType)
 			default:
 				return
 			}
@@ -169,7 +169,7 @@ func main() {
 			fmt.Println("+===========================+")
 			fmt.Printf("%-5s%-23s%-5s\n", "+", "Statistik Skripsi", "+")
 			fmt.Println("+===========================+")
-			statisticSkripsi(s, m)
+			statisticSkripsi(s, n, m)
 			continue
 		case 5:
 			return
