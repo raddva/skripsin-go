@@ -23,32 +23,33 @@ type MahasiswaList [nMax]Mahasiswa
 
 // Prosedur untuk menambah data skripsi beserta data mahasiswa yang terkait
 func addSkripsi(s *SkripsiList, n *int, m *MahasiswaList) {
+	fmt.Println("➤ Data Berhasil Ditambahkan!")
 }
 
 // Prosedur untuk mengupdate data skripsi berdasarkan ID
 func updateSkripsi(s *SkripsiList, m *MahasiswaList, id int) {
+	fmt.Println("➤ Data Berhasil Diperbarui!")
 }
 
 // Prosedur untuk menghapus data skripsi berdasarkan ID
 func deleteSkripsi(s *SkripsiList, n *int, id int) {
+	fmt.Println("➤ Data Berhasil Dihapus!")
 }
 
 // Prosedur untuk menampilkan semua data skripsi
-func getAllSkripsi(s SkripsiList, n int, m MahasiswaList) {
+func getAllSkripsi(s SkripsiList, n int) {
 }
 
 // Prosedur untuk menampilkan data skripsi berdasarkan ID
-func getSkripsi(s SkripsiList, n int, id int) {
+func getSkripsiById(s SkripsiList, n int, id int) {
 }
 
-// Fungsi untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan sequential search
-func findSkripsiSequential(s SkripsiList, n int, keyword string) int {
-	return 0
+// Prosedur untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan sequential search
+func findSkripsiSequential(s SkripsiList, n int, keyword string) {
 }
 
-// Fungsi untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan binary search
-func findSkripsiBinary(s SkripsiList, n int, keyword string) int {
-	return 0
+// Prosedur untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan binary search
+func findSkripsiBinary(s SkripsiList, n int, keyword string) {
 }
 
 // Prosedur untuk mengurutkan skripsi berdasarkan ID menggunakan selection sort
@@ -60,7 +61,7 @@ func sortSkripsiInsertion(s *SkripsiList, n int, sortType string) {
 }
 
 // Prosedur untuk menampilkan statistik skripsi, seperti jumlah skripsi per tahun, jumlah skripsi yang lulus, dll
-func statisticSkripsi(s SkripsiList, n int, m MahasiswaList) {
+func statisticSkripsi(s SkripsiList, n int) {
 }
 
 // Menu utama untuk menjalankan program
@@ -76,14 +77,15 @@ func main() {
 		fmt.Println("+================================================================+")
 		fmt.Println("Pilih Menu")
 		fmt.Println("1. Kelola Data Skripsi")
-		fmt.Println("2. Pencarian Skripsi")
-		fmt.Println("3. Pengurutan Skripsi")
-		fmt.Println("4. Statistik Skripsi")
-		fmt.Println("5. Keluar")
-
+		fmt.Println("2. Pencarian Skripsi (Berdasarkan Nama Mahasiswa atau Judul Penelitian)")
+		fmt.Println("3. Ambil data Skripsi Berdasarkan ID")
+		fmt.Println("4. Pengurutan Skripsi")
+		fmt.Println("5. Statistik Skripsi")
+		fmt.Println("6. Tampilkan Semua Data Skripsi")
+		fmt.Println("7. Keluar")
 		fmt.Print("Masukkan pilihan: ")
 		fmt.Scan(&mainChoice)
-		if mainChoice == 5 {
+		if mainChoice == 7 {
 			return
 		}
 
@@ -105,14 +107,12 @@ func main() {
 			case 1:
 				addSkripsi(&s, &n, &m)
 			case 2:
-				fmt.Print("Masukkan keyword pencarian: ")
-				fmt.Scan(&keyword)
-				id = findSkripsiSequential(s, n, keyword)
+				fmt.Print("Masukkan id skripsi yang akan di-update: ")
+				fmt.Scan(&id)
 				updateSkripsi(&s, &m, id)
 			case 3:
-				fmt.Print("Masukkan keyword pencarian: ")
-				fmt.Scan(&keyword)
-				id = findSkripsiSequential(s, n, keyword)
+				fmt.Print("Masukkan id skripsi yang akan dihapus: ")
+				fmt.Scan(&id)
 				deleteSkripsi(&s, &n, id)
 			default:
 				return
@@ -137,11 +137,19 @@ func main() {
 			case 2:
 				fmt.Print("Masukkan keyword pencarian: ")
 				fmt.Scan(&keyword)
+				sortSkripsiInsertion(&s, n, "asc")
 				findSkripsiBinary(s, n, keyword)
 			default:
 				return
 			}
 		case 3:
+			fmt.Println("+===========================+")
+			fmt.Printf("%-5s%-23s%-5s\n", "+", "Ambil Skripsi Berdasarkan ID", "+")
+			fmt.Println("+===========================+")
+			fmt.Print("Masukkan id skripsi yang akan diambil: ")
+			fmt.Scan(&id)
+			getSkripsiById(s, n, id)
+		case 4:
 			fmt.Println("+===========================+")
 			fmt.Printf("%-5s%-23s%-5s\n", "+", "Urutkan Skripsi", "+")
 			fmt.Println("+===========================+")
@@ -165,13 +173,16 @@ func main() {
 			default:
 				return
 			}
-		case 4:
+		case 5:
 			fmt.Println("+===========================+")
 			fmt.Printf("%-5s%-23s%-5s\n", "+", "Statistik Skripsi", "+")
 			fmt.Println("+===========================+")
-			statisticSkripsi(s, n, m)
+			statisticSkripsi(s, n)
 			continue
-		case 5:
+		case 6:
+			getAllSkripsi(s, n)
+			continue
+		case 7:
 			return
 		default:
 			fmt.Print("Masukkan pilihan: ")
