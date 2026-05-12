@@ -23,16 +23,117 @@ type MahasiswaList [nMax]Mahasiswa
 
 // Prosedur untuk menambah data skripsi beserta data mahasiswa yang terkait
 func addSkripsi(s *SkripsiList, n *int, m *MahasiswaList) {
+	var s1 Skripsi
+	fmt.Scanln()
+	fmt.Println("+===========================+")
+	fmt.Printf("%-5s%-23s%-5s\n", "+", "Tambah Data Skripsi", "+")
+	fmt.Println("+===========================+")
+	fmt.Printf("Jumlah Skripsi yang akan ditambahkan: ")
+	fmt.Scanln(n)
+	for i := 0; i < *n; i++ {
+		fmt.Printf("Skripsi %d\n", i+1)
+		s1.ID = i + 1
+		fmt.Printf("Tahun: ")
+		fmt.Scanf("%d\n", &s1.Year)
+		fmt.Printf("Judul: ")
+		fmt.Scanf("%s\n", &s1.Title)
+		fmt.Printf("NIM Mahasiswa: ")
+		fmt.Scanf("%s\n", &s1.Author.NIM)
+		fmt.Printf("Nama Mahasiswa: ")
+		fmt.Scanf("%s\n", &s1.Author.Name)
+		fmt.Printf("Dosen Pembimbing: ")
+		fmt.Scanf("%s\n", &s1.Author.DosBing)
+		fmt.Printf("Lulus (true/false): ")
+		fmt.Scanf("%t\n", &s1.Author.IsGraduated)
+		s[i] = s1
+		m[i] = s1.Author
+	}
 	fmt.Println("➤ Data Berhasil Ditambahkan!")
+}
+
+// Fungsi untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan sequential search
+func getSkripsiId(s SkripsiList, n int, keyword string) int {
+	for i := 0; i < n; i++ {
+		if s[i].Title == keyword || s[i].Author.Name == keyword {
+			return s[i].ID
+		}
+	}
+	return -1
 }
 
 // Prosedur untuk mengupdate data skripsi berdasarkan ID
 func updateSkripsi(s *SkripsiList, m *MahasiswaList, id int) {
+	var choice, idx, i int
+	idx = -1
+	i = 0
+	fmt.Println("+===========================+")
+	fmt.Printf("%-5s%-23s%-5s\n", "+", "Edit Data Skripsi", "+")
+	fmt.Println("+===========================+")
+
+	for i < len(s) {
+		if (*s)[i].ID == id {
+			idx = i
+			break
+		}
+		i++
+	}
+
+	fmt.Println("Pilih Menu")
+	fmt.Println("1. Judul Skripsi")
+	fmt.Println("2. Tahun Skripsi")
+	fmt.Println("3. Penulis Skripsi")
+	fmt.Println("4. Dosen Pembimbing Skripsi")
+	fmt.Println("5. Status Kelulusan")
+	fmt.Println("6. Kembali")
+	fmt.Print("Masukkan pilihan: ")
+	fmt.Scan(&choice)
+	switch choice {
+	case 1:
+		fmt.Printf("Masukkan Judul Skripsi baru: ")
+		fmt.Scan(&s[idx].Title)
+	case 2:
+		fmt.Printf("Masukkan Tahun Skripsi baru: ")
+		fmt.Scan(&s[idx].Year)
+	case 3:
+		fmt.Printf("Masukkan NIM Mahasiswa baru: ")
+		fmt.Scan(&s[idx].Author.NIM)
+		fmt.Printf("Masukkan Nama Mahasiswa baru: ")
+		fmt.Scan(&s[idx].Author.Name)
+	case 4:
+		fmt.Printf("Masukkan Dosen Pembimbing baru: ")
+		fmt.Scan(&s[idx].Author.DosBing)
+	case 5:
+		fmt.Printf("Masukkan Status Kelulusan baru (true/false): ")
+		fmt.Scan(&s[idx].Author.IsGraduated)
+		for j := 0; j < len(m); j++ {
+			if m[j].NIM == s[idx].Author.NIM {
+				m[j].IsGraduated = s[idx].Author.IsGraduated
+			}
+		}
+	case 6:
+		return
+	default:
+		fmt.Print("Masukkan pilihan: ")
+		fmt.Scan(&choice)
+	}
 	fmt.Println("➤ Data Berhasil Diperbarui!")
 }
 
 // Prosedur untuk menghapus data skripsi berdasarkan ID
 func deleteSkripsi(s *SkripsiList, n *int, id int) {
+	var i, idx int
+	idx = -1
+	fmt.Println("+===========================+")
+	fmt.Printf("%-5s%-23s%-5s\n", "+", "Hapus Data Skripsi", "+")
+	fmt.Println("+===========================+")
+	for i < *n {
+		if (*s)[i].ID == id {
+			(*s)[idx] = (*s)[i]
+			idx++
+			*n--
+		}
+		i++
+	}
 	fmt.Println("➤ Data Berhasil Dihapus!")
 }
 
@@ -107,12 +208,22 @@ func main() {
 			case 1:
 				addSkripsi(&s, &n, &m)
 			case 2:
-				fmt.Print("Masukkan id skripsi yang akan di-update: ")
-				fmt.Scan(&id)
+				fmt.Print("Masukkan judul penelitian/nama mahasiswa yang akan di-update: ")
+				fmt.Scan(&keyword)
+				id = getSkripsiId(s, n, keyword)
+				if id == -1 {
+					fmt.Println("Skripsi tidak ditemukan")
+					continue
+				}
 				updateSkripsi(&s, &m, id)
 			case 3:
-				fmt.Print("Masukkan id skripsi yang akan dihapus: ")
-				fmt.Scan(&id)
+				fmt.Print("Masukkan judul penelitian/nama mahasiswa yang akan dihapus: ")
+				fmt.Scan(&keyword)
+				id = getSkripsiId(s, n, keyword)
+				if id == -1 {
+					fmt.Println("Skripsi tidak ditemukan")
+					continue
+				}
 				deleteSkripsi(&s, &n, id)
 			default:
 				return
