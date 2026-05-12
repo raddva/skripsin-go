@@ -52,12 +52,12 @@ func findSkripsiSequential(s SkripsiList, n int, keyword string) {
 func findSkripsiBinary(s SkripsiList, n int, keyword string) {
 }
 
-// Prosedur untuk mengurutkan skripsi berdasarkan ID menggunakan selection sort
-func sortSkripsiSelection(s *SkripsiList, n int, sortType string) {
+// Prosedur untuk mengurutkan skripsi berdasarkan nama/tahun menggunakan selection sort
+func sortSkripsiSelection(s *SkripsiList, n int, sortBy string, sortType string) {
 }
 
-// Prosedur untuk mengurutkan skripsi berdasarkan ID menggunakan insertion sort
-func sortSkripsiInsertion(s *SkripsiList, n int, sortType string) {
+// Prosedur untuk mengurutkan skripsi berdasarkan nama/tahun menggunakan insertion sort
+func sortSkripsiInsertion(s *SkripsiList, n int, sortBy string, sortType string) {
 }
 
 // Prosedur untuk menampilkan statistik skripsi, seperti jumlah skripsi per tahun, jumlah skripsi yang lulus, dll
@@ -67,7 +67,7 @@ func statisticSkripsi(s SkripsiList, n int) {
 // Menu utama untuk menjalankan program
 func main() {
 	var mainChoice, subChoice, id, n int
-	var keyword, sortType string
+	var keyword, sortBy, sortType string
 	var s SkripsiList
 	var m MahasiswaList
 
@@ -137,7 +137,7 @@ func main() {
 			case 2:
 				fmt.Print("Masukkan keyword pencarian: ")
 				fmt.Scan(&keyword)
-				sortSkripsiInsertion(&s, n, "asc")
+				sortSkripsiInsertion(&s, n, "year", "asc")
 				findSkripsiBinary(s, n, keyword)
 			default:
 				return
@@ -163,13 +163,17 @@ func main() {
 			}
 			switch subChoice {
 			case 1:
+				fmt.Print("Masukkan tipe pengurutan (title/year): ")
+				fmt.Scan(&sortBy)
 				fmt.Print("Masukkan tipe pengurutan (asc/desc): ")
 				fmt.Scan(&sortType)
-				sortSkripsiSelection(&s, n, sortType)
+				sortSkripsiSelection(&s, n, sortBy, sortType)
 			case 2:
+				fmt.Print("Masukkan tipe pengurutan (title/year): ")
+				fmt.Scan(&sortBy)
 				fmt.Print("Masukkan tipe pengurutan (asc/desc): ")
 				fmt.Scan(&sortType)
-				sortSkripsiInsertion(&s, n, sortType)
+				sortSkripsiInsertion(&s, n, sortBy, sortType)
 			default:
 				return
 			}
