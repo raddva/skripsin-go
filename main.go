@@ -155,10 +155,66 @@ func findSkripsiBinary(s SkripsiList, n int, keyword string) {
 
 // Prosedur untuk mengurutkan skripsi berdasarkan nama/tahun menggunakan selection sort
 func sortSkripsiSelection(s *SkripsiList, n int, sortBy string, sortType string) {
+	for i := 0; i < n-1; i++ {
+		idx := i
+		for j := i + 1; j < n; j++ {
+			if sortType == "asc" {
+				if sortBy == "title" {
+					if (*s)[j].Title < (*s)[idx].Title {
+						idx = j
+					}
+				} else {
+					if (*s)[j].Year < (*s)[idx].Year {
+						idx = j
+					}
+				}
+			} else {
+				if sortBy == "title" {
+					if (*s)[j].Title > (*s)[idx].Title {
+						idx = j
+					}
+				} else {
+					if (*s)[j].Year > (*s)[idx].Year {
+						idx = j
+					}
+				}
+			}
+		}
+		(*s)[i], (*s)[idx] = (*s)[idx], (*s)[i]
+	}
 }
 
 // Prosedur untuk mengurutkan skripsi berdasarkan nama/tahun menggunakan insertion sort
 func sortSkripsiInsertion(s *SkripsiList, n int, sortBy string, sortType string) {
+	for i := 0; i < n; i++ {
+		key := (*s)[i]
+		j := i - 1
+		if sortType == "asc" {
+			if sortBy == "title" {
+				for j >= 0 && (*s)[j].Title > key.Title {
+					(*s)[j+1] = (*s)[j]
+					j--
+				}
+			} else {
+				for j >= 0 && (*s)[j].Year > key.Year {
+					(*s)[j+1] = (*s)[j]
+					j--
+				}
+			}
+		} else {
+			if sortBy == "title" {
+				for j >= 0 && (*s)[j].Title < key.Title {
+					(*s)[j+1] = (*s)[j]
+					j--
+				}
+			} else {
+				for j >= 0 && (*s)[j].Year < key.Year {
+					(*s)[j+1] = (*s)[j]
+					j--
+				}
+			}
+		}
+	}
 }
 
 // Prosedur untuk menampilkan statistik skripsi, seperti jumlah skripsi per tahun, jumlah skripsi yang lulus, dll
