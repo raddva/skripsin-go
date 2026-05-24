@@ -33,7 +33,6 @@ type Skripsi struct {
 // End of Struktur Data
 
 // Tipe data untuk menyimpan daftar skripsi dan daftar mahasiswa
-type FoundList [nMax]Skripsi
 type SkripsiList [nMax]Skripsi
 type MahasiswaList [nMax]Mahasiswa
 
@@ -352,7 +351,15 @@ func printSkripsi(s SkripsiList, n int) {
 
 // Prosedur untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan sequential search
 func findSkripsiSequential(s SkripsiList, n int, keyword string) {
-	// var f FoundList
+	var f SkripsiList
+	var length int
+	for i := 0; i < n; i++ {
+		if contains(s[i].Title, keyword) || contains(s[i].Author.Name, keyword) {
+			f[i] = s[i]
+			length++
+		}
+	}
+	printSkripsi(f, length)
 }
 
 // Prosedur untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan binary search
