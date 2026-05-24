@@ -10,7 +10,7 @@ import (
 // Global Variables
 const nMax = 100
 
-var reader = bufio.NewReader(os.Stdin) // temporary use
+var reader = bufio.NewReader(os.Stdin) // temporary use, pengganti fmt kocak gabisa input string spasi euy
 
 // End of Global Variables
 
@@ -31,6 +31,7 @@ type Skripsi struct {
 // End of Struktur Data
 
 // Tipe data untuk menyimpan daftar skripsi dan daftar mahasiswa
+type FoundList [nMax]Skripsi
 type SkripsiList [nMax]Skripsi
 type MahasiswaList [nMax]Mahasiswa
 
@@ -59,6 +60,19 @@ func isAlpha(s string) bool {
 			c != ' ' {
 			return false
 		}
+	}
+	return true
+}
+
+func isValidYear(s string) bool {
+	var year int
+	if !isNumber(s) {
+		return false
+	}
+
+	fmt.Sscanf(s, "%d", &year)
+	if year < 1900 || year > 2026 { // batasi karena sekarang baru 2026 :v
+		return false
 	}
 	return true
 }
@@ -114,11 +128,11 @@ func addSkripsi(s *SkripsiList, n *int, m *MahasiswaList) {
 			fmt.Print("Tahun: ")
 			input, _ = reader.ReadString('\n')
 			input = strings.TrimSpace(input)
-			if isNumber(input) {
+			if isValidYear(input) {
 				fmt.Sscanf(input, "%d", &s1.Year)
 				break
 			}
-			fmt.Println("✗ Tahun hanya boleh angka!")
+			fmt.Println("✗ Tahun harus valid!")
 		}
 		fmt.Print("Judul: ")
 		input, _ = reader.ReadString('\n')
@@ -176,6 +190,7 @@ func getSkripsiIdx(s SkripsiList, n int, keyword string) int {
 // Prosedur untuk mengupdate data skripsi berdasarkan Index
 func updateSkripsi(s *SkripsiList, m *MahasiswaList, idx int) {
 	var choice int
+	var input string
 	fmt.Println("✦===========================✦")
 	fmt.Printf("%-5s%-23s%-5s\n", "✦", "Edit Data Skripsi", "✦")
 	fmt.Println("✦===========================✦")
@@ -186,14 +201,36 @@ func updateSkripsi(s *SkripsiList, m *MahasiswaList, idx int) {
 	fmt.Println("5. Status Kelulusan")
 	fmt.Println("6. Kembali")
 	fmt.Print("⟡ ݁₊ .Masukkan pilihan: ")
-	fmt.Scan(&choice)
+	for {
+		fmt.Print("⟡ ݁₊ .Masukkan pilihan: ")
+		input, _ = reader.ReadString('\n')
+		input = strings.TrimSpace(input)
+		if isNumber(input) {
+			fmt.Sscanf(input, "%d", &choice)
+			break
+		}
+
+		fmt.Println("✗ Pilihan harus angka!")
+	}
+
 	switch choice {
 	case 1:
+		fmt.Println("⛧ Judul Sebelumnya: ", s[idx].Title)
+
 		fmt.Printf("⏾ Masukkan Judul Skripsi baru: ")
 		fmt.Scan(&s[idx].Title)
 	case 2:
-		fmt.Printf("⏾ Masukkan Tahun Skripsi baru: ")
-		fmt.Scan(&s[idx].Year)
+		fmt.Println("⛧ Tahun Sebelumnya: ", s[idx].Year)
+		for {
+			fmt.Printf(" Masukkan Tahun Skripsi baru: ")
+			input, _ = reader.ReadString('\n')
+			input = strings.TrimSpace(input)
+			if isValidYear(input) {
+				fmt.Sscanf(input, "%d", &s[idx].Year)
+				break
+			}
+			fmt.Println("✗ Tahun harus valid!")
+		}
 	case 3:
 		fmt.Printf("⏾ Masukkan NIM Mahasiswa baru: ")
 		fmt.Scan(&s[idx].Author.NIM)
@@ -213,8 +250,16 @@ func updateSkripsi(s *SkripsiList, m *MahasiswaList, idx int) {
 	case 6:
 		return
 	default:
-		fmt.Print("⟡ ݁₊ .Masukkan pilihan: ")
-		fmt.Scan(&choice)
+		for {
+			fmt.Print("⟡ ݁₊ .Masukkan pilihan: ")
+			input, _ = reader.ReadString('\n')
+			input = strings.TrimSpace(input)
+			if isNumber(input) {
+				fmt.Sscanf(input, "%d", &choice)
+				break
+			}
+			fmt.Println("✗ Pilihan harus angka!")
+		}
 	}
 	fmt.Println("➤ Data Berhasil Diperbarui!")
 }
@@ -244,10 +289,12 @@ func getAllSkripsi(s SkripsiList, n int) {
 
 // Prosedur untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan sequential search
 func findSkripsiSequential(s SkripsiList, n int, keyword string) {
+	var f FoundList
 }
 
 // Prosedur untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan binary search
 func findSkripsiBinary(s SkripsiList, n int, keyword string) {
+	var f FoundList
 }
 
 // Prosedur untuk mengurutkan skripsi berdasarkan nama/tahun menggunakan selection sort
@@ -418,18 +465,30 @@ func main() {
 			fmt.Println("1. Pencarian Sequential")
 			fmt.Println("2. Pencarian Binary")
 			fmt.Print("⟡ ݁₊ .Masukkan pilihan: ")
-			fmt.Scan(&subChoice)
+			for {
+				fmt.Print("⟡ ݁₊ .Masukkan pilihan: ")
+				input, _ = reader.ReadString('\n')
+				input = strings.TrimSpace(input)
+				if isNumber(input) {
+					fmt.Sscanf(input, "%d", &subChoice)
+					break
+				}
+
+				fmt.Println("✗ Pilihan harus angka!")
+			}
 			if subChoice == 0 {
 				continue
 			}
 			switch subChoice {
 			case 1:
 				fmt.Print("⟡ ݁₊ .Masukkan keyword pencarian: ")
-				fmt.Scan(&keyword)
+				keyword, _ = reader.ReadString('\n')
+				keyword = strings.TrimSpace(keyword)
 				findSkripsiSequential(s, n, keyword)
 			case 2:
 				fmt.Print("⟡ ݁₊ .Masukkan keyword pencarian: ")
-				fmt.Scan(&keyword)
+				keyword, _ = reader.ReadString('\n')
+				keyword = strings.TrimSpace(keyword)
 				sortSkripsiInsertion(&s, n, "year", "asc")
 				findSkripsiBinary(s, n, keyword)
 			default:
@@ -443,22 +502,36 @@ func main() {
 			fmt.Println("1. Selection Sort")
 			fmt.Println("2. Insertion Sort")
 			fmt.Print("⟡ ݁₊ .Masukkan pilihan: ")
-			fmt.Scan(&subChoice)
+			for {
+				fmt.Print("⟡ ݁₊ .Masukkan pilihan: ")
+				input, _ = reader.ReadString('\n')
+				input = strings.TrimSpace(input)
+				if isNumber(input) {
+					fmt.Sscanf(input, "%d", &subChoice)
+					break
+				}
+
+				fmt.Println("✗ Pilihan harus angka!")
+			}
 			if subChoice == 0 {
 				continue
 			}
 			switch subChoice {
 			case 1:
 				fmt.Print("⟡ ݁₊ .Masukkan tipe pengurutan (title/year): ")
-				fmt.Scan(&sortBy)
+				sortBy, _ = reader.ReadString('\n')
+				sortBy = strings.TrimSpace(sortBy)
 				fmt.Print("⟡ ݁₊ .Masukkan tipe pengurutan (asc/desc): ")
-				fmt.Scan(&sortType)
+				sortType, _ = reader.ReadString('\n')
+				sortType = strings.TrimSpace(sortType)
 				sortSkripsiSelection(&s, n, sortBy, sortType)
 			case 2:
 				fmt.Print("⟡ ݁₊ .Masukkan tipe pengurutan (title/year): ")
-				fmt.Scan(&sortBy)
+				sortBy, _ = reader.ReadString('\n')
+				sortBy = strings.TrimSpace(sortBy)
 				fmt.Print("⟡ ݁₊ .Masukkan tipe pengurutan (asc/desc): ")
-				fmt.Scan(&sortType)
+				sortType, _ = reader.ReadString('\n')
+				sortType = strings.TrimSpace(sortType)
 				sortSkripsiInsertion(&s, n, sortBy, sortType)
 			default:
 				return
@@ -475,8 +548,16 @@ func main() {
 		case 6:
 			return
 		default:
-			fmt.Print("⟡ ݁₊ .Masukkan pilihan: ")
-			fmt.Scan(&mainChoice)
+			for {
+				fmt.Print("⟡ ݁₊ .Masukkan pilihan: ")
+				input, _ = reader.ReadString('\n')
+				input = strings.TrimSpace(input)
+				if isNumber(input) {
+					fmt.Sscanf(input, "%d", &subChoice)
+					break
+				}
+				fmt.Println("✗ Pilihan harus angka!")
+			}
 		}
 	}
 }
