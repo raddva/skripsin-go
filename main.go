@@ -10,7 +10,7 @@ import (
 )
 
 // Global Variables
-const nMax = 100
+const nMax = 9999
 
 var reader = bufio.NewReader(os.Stdin) // temporary use, pengganti fmt kocak gabisa input string spasi euy
 
@@ -470,6 +470,27 @@ func sortSkripsiInsertion(s *SkripsiList, n int, sortBy string, sortType string)
 
 // Prosedur untuk menampilkan statistik skripsi, seperti jumlah skripsi per tahun, jumlah skripsi yang lulus, dll
 func statisticSkripsi(s SkripsiList, n int) {
+	var CountPerYear [nMax]int
+	var CountGraduated int
+	for i := 0; i < n; i++ {
+		CountPerYear[s[i].Year]++
+		if s[i].Author.IsGraduated {
+			CountGraduated++
+		}
+	}
+	fmt.Println("✦================================✦")
+	fmt.Printf("\n✦%-22s✦", "STATISTIK")
+	fmt.Println("✦================================✦")
+	fmt.Println("Jumlah skripsi pertahun")
+	for year := 0; year < nMax; year++ {
+		if CountPerYear[year] > 0 {
+			fmt.Printf("%d : %d skripsi\n", year, CountPerYear[year])
+		}
+
+	}
+	fmt.Printf("Jumlah skripsi lulus: %d", CountGraduated)
+	fmt.Println("Total skripsi: %d", n)
+
 }
 
 // End Subprograms
