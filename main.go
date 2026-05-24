@@ -1,3 +1,5 @@
+// disclaimer: kodingan masih berantakan dikit, nanti final dirapihin (insyaAllah)
+// ini komen bner komen manusia (saya)(nadya), bingung jelasinnyh ya gitulah pokonya
 package main
 
 import (
@@ -118,7 +120,7 @@ func addSkripsi(s *SkripsiList, n *int, m *MahasiswaList) {
 			fmt.Sscanf(input, "%d", &addition)
 			break
 		} else {
-			fmt.Println("✗ Input harus angka!")
+			fmt.Println("⚠︎ Input harus angka!")
 		}
 	}
 
@@ -132,7 +134,7 @@ func addSkripsi(s *SkripsiList, n *int, m *MahasiswaList) {
 				fmt.Sscanf(input, "%d", &s1.Year)
 				break
 			}
-			fmt.Println("✗ Tahun harus valid!")
+			fmt.Println("⚠︎ Tahun harus valid!")
 		}
 		fmt.Print("Judul: ")
 		input, _ = reader.ReadString('\n')
@@ -145,7 +147,7 @@ func addSkripsi(s *SkripsiList, n *int, m *MahasiswaList) {
 				s1.Author.NIM = input
 				break
 			}
-			fmt.Println("✗ NIM hanya boleh angka!")
+			fmt.Println("⚠︎ NIM hanya boleh angka!")
 		}
 		for {
 			fmt.Print("Nama Mahasiswa: ")
@@ -155,7 +157,7 @@ func addSkripsi(s *SkripsiList, n *int, m *MahasiswaList) {
 				s1.Author.Name = input
 				break
 			}
-			fmt.Println("✗ Nama hanya boleh huruf!")
+			fmt.Println("⚠︎ Nama hanya boleh huruf!")
 		}
 
 		for {
@@ -166,7 +168,7 @@ func addSkripsi(s *SkripsiList, n *int, m *MahasiswaList) {
 				s1.Author.DosBing = input
 				break
 			}
-			fmt.Println("✗ Nama dosen hanya boleh huruf!")
+			fmt.Println("⚠︎ Nama dosen hanya boleh huruf!")
 		}
 		s1.Author.IsGraduated = false
 		s[i] = s1
@@ -179,8 +181,7 @@ func addSkripsi(s *SkripsiList, n *int, m *MahasiswaList) {
 // Fungsi untuk mencari Index skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan sequential search
 func getSkripsiIdx(s SkripsiList, n int, keyword string) int {
 	for i := 0; i < n; i++ {
-		if contains(s[i].Title, keyword) ||
-			contains(s[i].Author.Name, keyword) {
+		if s[i].Title == keyword || s[i].Author.Name == keyword {
 			return i
 		}
 	}
@@ -200,7 +201,6 @@ func updateSkripsi(s *SkripsiList, m *MahasiswaList, idx int) {
 	fmt.Println("4. Dosen Pembimbing Skripsi")
 	fmt.Println("5. Status Kelulusan")
 	fmt.Println("6. Kembali")
-	fmt.Print("⟡ ݁₊ .Masukkan pilihan: ")
 	for {
 		fmt.Print("⟡ ݁₊ .Masukkan pilihan: ")
 		input, _ = reader.ReadString('\n')
@@ -210,38 +210,80 @@ func updateSkripsi(s *SkripsiList, m *MahasiswaList, idx int) {
 			break
 		}
 
-		fmt.Println("✗ Pilihan harus angka!")
+		fmt.Println("⚠︎ Pilihan harus angka!")
 	}
 
 	switch choice {
 	case 1:
 		fmt.Println("⛧ Judul Sebelumnya: ", s[idx].Title)
-
 		fmt.Printf("⏾ Masukkan Judul Skripsi baru: ")
-		fmt.Scan(&s[idx].Title)
+		input, _ = reader.ReadString('\n')
+		s[idx].Title = strings.TrimSpace(input)
 	case 2:
 		fmt.Println("⛧ Tahun Sebelumnya: ", s[idx].Year)
 		for {
-			fmt.Printf(" Masukkan Tahun Skripsi baru: ")
+			fmt.Printf("⏾ Masukkan Tahun Skripsi baru: ")
 			input, _ = reader.ReadString('\n')
 			input = strings.TrimSpace(input)
 			if isValidYear(input) {
 				fmt.Sscanf(input, "%d", &s[idx].Year)
 				break
 			}
-			fmt.Println("✗ Tahun harus valid!")
+			fmt.Println("⚠︎ Tahun harus valid!")
 		}
 	case 3:
-		fmt.Printf("⏾ Masukkan NIM Mahasiswa baru: ")
-		fmt.Scan(&s[idx].Author.NIM)
-		fmt.Printf("⏾ Masukkan Nama Mahasiswa baru: ")
-		fmt.Scan(&s[idx].Author.Name)
+		fmt.Println("⛧ NIM Sebelumnya: ", s[idx].Author.NIM)
+		fmt.Println("⛧ Nama Penulis Sebelumnya: ", s[idx].Author.Name)
+		for {
+			fmt.Printf("⏾ Masukkan NIM Mahasiswa baru: ")
+			input, _ = reader.ReadString('\n')
+			input = strings.TrimSpace(input)
+			if isNumber(input) {
+				s[idx].Author.NIM = input
+				break
+			}
+			fmt.Println("⚠︎ NIM hanya boleh angka!")
+		}
+
+		for {
+			fmt.Printf("⏾ Masukkan Nama Mahasiswa baru: ")
+			input, _ = reader.ReadString('\n')
+			input = strings.TrimSpace(input)
+			if isAlpha(input) {
+				s[idx].Author.Name = input
+				break
+			}
+			fmt.Println("⚠︎ Nama hanya boleh huruf!")
+		}
 	case 4:
-		fmt.Printf("⏾ Masukkan Dosen Pembimbing baru: ")
-		fmt.Scan(&s[idx].Author.DosBing)
+		for {
+			fmt.Printf("⏾ Masukkan Dosen Pembimbing baru: ")
+			input, _ = reader.ReadString('\n')
+			input = strings.TrimSpace(input)
+			if isAlpha(input) {
+				s[idx].Author.DosBing = input
+				break
+			}
+			fmt.Println("⚠︎ Nama Dosen hanya boleh huruf!")
+		}
 	case 5:
-		fmt.Printf("⏾ Masukkan Status Kelulusan baru (true/false): ")
-		fmt.Scan(&s[idx].Author.IsGraduated)
+		for {
+			fmt.Print("⏾ Update Status Kelulusan (1=lulus, 0=belum): ")
+
+			input, _ = reader.ReadString('\n')
+			input = strings.TrimSpace(input)
+
+			if input == "1" {
+				s[idx].Author.IsGraduated = true
+				break
+			} else if input == "0" {
+				s[idx].Author.IsGraduated = false
+				break
+			}
+
+			fmt.Println("⚠︎ Hanya boleh input 1 atau 0!")
+		}
+
 		for j := 0; j < len(m); j++ {
 			if m[j].NIM == s[idx].Author.NIM {
 				m[j].IsGraduated = s[idx].Author.IsGraduated
@@ -258,7 +300,7 @@ func updateSkripsi(s *SkripsiList, m *MahasiswaList, idx int) {
 				fmt.Sscanf(input, "%d", &choice)
 				break
 			}
-			fmt.Println("✗ Pilihan harus angka!")
+			fmt.Println("⚠︎ Pilihan harus angka!")
 		}
 	}
 	fmt.Println("➤ Data Berhasil Diperbarui!")
@@ -283,32 +325,39 @@ func deleteSkripsi(s *SkripsiList, n *int, idx int) {
 	fmt.Println("➤ Data Berhasil Dihapus!")
 }
 
-// Prosedur untuk menampilkan semua data skripsi
-func getAllSkripsi(s SkripsiList, n int) {
+// Prosedur untuk menampilkan (cetak) semua data skripsi
+func printSkripsi(s SkripsiList, n int) {
+	if n == 0 {
+		fmt.Println("✦===========================✦")
+		fmt.Println("    Data Skripsi Masih Kosong!   ")
+		fmt.Println("✦===========================✦")
+		return
+	}
+
 	var i int
 	var status string
-	fmt.Println("✦===================================================================✦")
-	fmt.Printf("✦ %-8s || %-8s || %-8s || %-8s || %-8s || %-8s ✦\n", "YEAR", "TITTLE", "NIM", "NAMA", "DOSBING", "STATUS")
-	fmt.Println("✦===================================================================✦")
+	fmt.Println("✦==============================================================================================================================================✦")
+	fmt.Printf("✦ %-5s || %-35s || %-15s || %-25s || %-25s || %-15s ✦\n", "TAHUN", "JUDUL SKRIPSI", "NIM", "NAMA", "DOSEN PEMBIMBING", "STATUS")
+	fmt.Println("✦==============================================================================================================================================✦")
 	for i = 0; i < n; i++ {
 		if s[i].Author.IsGraduated {
 			status = "Lulus"
 		} else {
 			status = "Belum lulus"
 		}
-		fmt.Printf("✦ %-8d || %-8s || %-8s || %-8s || %-8s || %-8s ✦\n", s[i].Year, s[i].Title, s[i].Author.NIM, s[i].Author.Name, s[i].Author.DosBing, status)
-		fmt.Println("✦======================================================================✦")
+		fmt.Printf("✦ %-5d || %-35s || %-15s || %-25s || %-25s || %-15s ✦\n", s[i].Year, s[i].Title, s[i].Author.NIM, s[i].Author.Name, s[i].Author.DosBing, status)
 	}
+	fmt.Println("✦==============================================================================================================================================✦")
 }
 
 // Prosedur untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan sequential search
 func findSkripsiSequential(s SkripsiList, n int, keyword string) {
-	var f FoundList
+	// var f FoundList
 }
 
 // Prosedur untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan binary search
 func findSkripsiBinary(s SkripsiList, n int, keyword string) {
-	var f FoundList
+	// var f FoundList
 }
 
 // Prosedur untuk mengurutkan skripsi berdasarkan nama/tahun menggunakan selection sort
@@ -407,7 +456,7 @@ func main() {
 				break
 			}
 
-			fmt.Println("✗ Pilihan harus angka!")
+			fmt.Println("⚠︎ Pilihan harus angka!")
 		}
 		if mainChoice == 6 {
 			return
@@ -431,7 +480,7 @@ func main() {
 					break
 				}
 
-				fmt.Println("✗ Pilihan harus angka!")
+				fmt.Println("⚠︎ Pilihan harus angka!")
 			}
 			if subChoice == 0 {
 				continue
@@ -459,7 +508,6 @@ func main() {
 				updateSkripsi(&s, &m, idx)
 			case 3:
 				fmt.Print("⟡ ݁₊ .Masukkan judul penelitian/nama mahasiswa yang akan dihapus: ")
-				fmt.Print("⟡ ݁₊ .Masukkan keyword: ")
 				keyword, _ = reader.ReadString('\n')
 				keyword = strings.TrimSpace(keyword)
 				idx = getSkripsiIdx(s, n, keyword)
@@ -488,7 +536,7 @@ func main() {
 					break
 				}
 
-				fmt.Println("✗ Pilihan harus angka!")
+				fmt.Println("⚠︎ Pilihan harus angka!")
 			}
 			if subChoice == 0 {
 				continue
@@ -525,7 +573,7 @@ func main() {
 					break
 				}
 
-				fmt.Println("✗ Pilihan harus angka!")
+				fmt.Println("⚠︎ Pilihan harus angka!")
 			}
 			if subChoice == 0 {
 				continue
@@ -557,7 +605,7 @@ func main() {
 			statisticSkripsi(s, n)
 			continue
 		case 5:
-			getAllSkripsi(s, n)
+			printSkripsi(s, n)
 			continue
 		case 6:
 			return
@@ -570,7 +618,7 @@ func main() {
 					fmt.Sscanf(input, "%d", &subChoice)
 					break
 				}
-				fmt.Println("✗ Pilihan harus angka!")
+				fmt.Println("⚠︎ Pilihan harus angka!")
 			}
 		}
 	}
