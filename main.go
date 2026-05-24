@@ -285,6 +285,20 @@ func deleteSkripsi(s *SkripsiList, n *int, idx int) {
 
 // Prosedur untuk menampilkan semua data skripsi
 func getAllSkripsi(s SkripsiList, n int) {
+	var i int
+	var status string
+	fmt.Println("✦===================================================================✦")
+	fmt.Printf("✦ %-8s || %-8s || %-8s || %-8s || %-8s || %-8s ✦\n", "YEAR", "TITTLE", "NIM", "NAMA", "DOSBING", "STATUS")
+	fmt.Println("✦===================================================================✦")
+	for i = 0; i < n; i++ {
+		if s[i].Author.IsGraduated {
+			status = "Lulus"
+		} else {
+			status = "Belum lulus"
+		}
+		fmt.Printf("✦ %-8d || %-8s || %-8s || %-8s || %-8s || %-8s ✦\n", s[i].Year, s[i].Title, s[i].Author.NIM, s[i].Author.Name, s[i].Author.DosBing, status)
+		fmt.Println("✦======================================================================✦")
+	}
 }
 
 // Prosedur untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan sequential search
