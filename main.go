@@ -105,7 +105,7 @@ func contains(text, keyword string) bool {
 // Prosedur untuk menambah data skripsi beserta data mahasiswa yang terkait
 func addSkripsi(s *SkripsiList, n *int, m *MahasiswaList) {
 	var s1 Skripsi
-	var addition int
+	var addition, start, end int
 	var input string
 	fmt.Println()
 	fmt.Println("✦===========================✦")
@@ -117,13 +117,19 @@ func addSkripsi(s *SkripsiList, n *int, m *MahasiswaList) {
 		input = strings.TrimSpace(input)
 		if isNumber(input) {
 			fmt.Sscanf(input, "%d", &addition)
+			if *n+addition > len(s) {
+				fmt.Println("⚠︎ Kapasitas data penuh!")
+				return
+			}
 			break
 		} else {
 			fmt.Println("⚠︎ Input harus angka!")
 		}
 	}
 
-	for i := *n; i < *n+addition; i++ {
+	start = *n
+	end = start + addition
+	for i := start; i < end; i++ {
 		fmt.Printf("\nSkripsi %d\n", i+1)
 		for {
 			fmt.Print("Tahun: ")
@@ -173,7 +179,7 @@ func addSkripsi(s *SkripsiList, n *int, m *MahasiswaList) {
 		s[i] = s1
 		m[i] = s1.Author
 	}
-	*n += addition
+	*n = end
 	fmt.Println("\n➤ Data Berhasil Ditambahkan!")
 }
 
