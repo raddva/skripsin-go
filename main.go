@@ -78,22 +78,45 @@ func isValidYear(s string) bool {
 	return true
 }
 
-func contains(text, keyword string) bool {
+func sequentialContains(text, keyword string) bool {
 	nText := len(text)
 	nKey := len(keyword)
 	if nKey > nText {
 		return false
 	}
-
 	for i := 0; i <= nText-nKey; i++ {
 		match := true
 		for j := 0; j < nKey; j++ {
 			if text[i+j] != keyword[j] {
 				match = false
+				break
 			}
 		}
 		if match {
 			return true
+		}
+	}
+	return false
+}
+
+func binaryContains(text, keyword string) bool {
+	nText := len(text)
+	nKey := len(keyword)
+	if nKey > nText {
+		return false
+	}
+	left := 0
+	right := nText - nKey
+	for left <= right {
+		mid := (left + right) / 2
+		sub := text[mid : mid+nKey]
+		if sub == keyword {
+			return true
+		}
+		if sub < keyword {
+			left = mid + 1
+		} else {
+			right = mid - 1
 		}
 	}
 	return false
@@ -360,7 +383,7 @@ func findSkripsiSequential(s SkripsiList, n int, keyword string) {
 	var f SkripsiList
 	var length int
 	for i := 0; i < n; i++ {
-		if contains(s[i].Title, keyword) || contains(s[i].Author.Name, keyword) {
+		if sequentialContains(s[i].Title, keyword) || sequentialContains(s[i].Author.Name, keyword) {
 			f[i] = s[i]
 			length++
 		}
@@ -370,7 +393,15 @@ func findSkripsiSequential(s SkripsiList, n int, keyword string) {
 
 // Prosedur untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan binary search
 func findSkripsiBinary(s SkripsiList, n int, keyword string) {
-	// var f FoundList
+	var f SkripsiList
+	var length int
+	for i := 0; i < n; i++ {
+		if binaryContains(s[i].Title, keyword) || binaryContains(s[i].Author.Name, keyword) {
+			f[i] = s[i]
+			length++
+		}
+	}
+	printSkripsi(f, length)
 }
 
 // Prosedur untuk mengurutkan skripsi berdasarkan nama/tahun menggunakan selection sort
