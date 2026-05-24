@@ -21,8 +21,8 @@ Berdasarkan kebutuhan fungsional, sistem ini mencakup poin-poin berikut:
 
 ## Struktur Data Utama
 Aplikasi mengelola beberapa entitas data penting, antara lain:
-- Informasi Skripsi: Judul penelitian dan topik penelitian.  
-- Informasi Penulis: Nama mahasiswa dan status kelulusan.  
+- Informasi Skripsi: Judul penelitian atau topik penelitian.
+- Informasi Penulis: Nama mahasiswa dan status kelulusan.
 - Akademik: Nama pembimbing dan tahun lulus.
 
 ## Cara Menjalankan Aplikasi
