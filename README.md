@@ -40,4 +40,5 @@ go run main.go
 
 ___
 
-_Dokumen ini disusun sebagai bagian dari pemenuhan tugas mata kuliah Algoritma dan Pemrograman._
+_Link Laporan: [Laporan Tubes Alpro]()_
+_Dokumen ini disusun sebagai bagian dari pemenuhan tugas mata kuliah Algoritma dan Pemrograman 2._

@@ -10,7 +10,8 @@ import (
 )
 
 // Global Variables
-const nMax = 9999
+const nMax = 999
+const nYear = 2026 // Batasi tahun: 2026
 
 var reader = bufio.NewReader(os.Stdin) // temporary use, pengganti fmt kocak gabisa input string spasi euy
 
@@ -27,6 +28,7 @@ type Mahasiswa struct {
 type Skripsi struct {
 	Year   int
 	Title  string
+	Topic  string
 	Author Mahasiswa
 }
 
@@ -76,7 +78,7 @@ func isValidYear(s string) bool {
 	}
 
 	fmt.Sscanf(s, "%d", &year)
-	if year < 1900 || year > 2026 { // batasi karena sekarang baru 2026 :v
+	if year < 1900 || year > nYear { // batasi karena sekarang baru 2026 :v
 		return false
 	}
 	return true
@@ -176,6 +178,16 @@ func addSkripsi(s *SkripsiList, n *int) {
 		input, _ = reader.ReadString('\n')
 		s1.Title = strings.TrimSpace(input)
 		for {
+			fmt.Print("Topik Penelitian: ")
+			input, _ = reader.ReadString('\n')
+			input = strings.TrimSpace(input)
+			if isAlpha(input) {
+				s1.Topic = input
+				break
+			}
+			fmt.Println("⚠︎ Topik Penelitian hanya boleh huruf!")
+		}
+		for {
 			fmt.Print("NIM Mahasiswa: ")
 			input, _ = reader.ReadString('\n')
 			input = strings.TrimSpace(input)
@@ -185,6 +197,7 @@ func addSkripsi(s *SkripsiList, n *int) {
 			}
 			fmt.Println("⚠︎ NIM hanya boleh angka!")
 		}
+
 		for {
 			fmt.Print("Nama Mahasiswa: ")
 			input, _ = reader.ReadString('\n')
@@ -231,11 +244,12 @@ func updateSkripsi(s *SkripsiList, n int, idx int) {
 	fmt.Printf("%-5s%-23s%-5s\n", "✦", "Edit Data Skripsi", "✦")
 	fmt.Println("✦===========================✦")
 	fmt.Println("1. Judul Skripsi")
-	fmt.Println("2. Tahun Skripsi")
-	fmt.Println("3. Penulis Skripsi")
-	fmt.Println("4. Dosen Pembimbing Skripsi")
-	fmt.Println("5. Status Kelulusan")
-	fmt.Println("6. Kembali")
+	fmt.Println("2. Topik Skripsi")
+	fmt.Println("3. Tahun Skripsi")
+	fmt.Println("4. Penulis Skripsi")
+	fmt.Println("5. Dosen Pembimbing Skripsi")
+	fmt.Println("6. Status Kelulusan")
+	fmt.Println("7. Kembali")
 	for {
 		fmt.Print("⟡ ݁₊ .Masukkan pilihan: ")
 		input, _ = reader.ReadString('\n')
@@ -255,6 +269,17 @@ func updateSkripsi(s *SkripsiList, n int, idx int) {
 		input, _ = reader.ReadString('\n')
 		s[idx].Title = strings.TrimSpace(input)
 	case 2:
+		for {
+			fmt.Printf("⏾ Masukkan Topik Penelitian baru: ")
+			input, _ = reader.ReadString('\n')
+			input = strings.TrimSpace(input)
+			if isAlpha(input) {
+				s[idx].Topic = input
+				break
+			}
+			fmt.Println("⚠︎ Topik Penelitian hanya boleh huruf!")
+		}
+	case 3:
 		fmt.Println("⛧ Tahun Sebelumnya: ", s[idx].Year)
 		for {
 			fmt.Printf("⏾ Masukkan Tahun Skripsi baru: ")
@@ -266,7 +291,7 @@ func updateSkripsi(s *SkripsiList, n int, idx int) {
 			}
 			fmt.Println("⚠︎ Tahun harus valid!")
 		}
-	case 3:
+	case 4:
 		fmt.Println("⛧ NIM Sebelumnya: ", s[idx].Author.NIM)
 		fmt.Println("⛧ Nama Penulis Sebelumnya: ", s[idx].Author.Name)
 		for {
@@ -290,7 +315,7 @@ func updateSkripsi(s *SkripsiList, n int, idx int) {
 			}
 			fmt.Println("⚠︎ Nama hanya boleh huruf!")
 		}
-	case 4:
+	case 5:
 		for {
 			fmt.Printf("⏾ Masukkan Dosen Pembimbing baru: ")
 			input, _ = reader.ReadString('\n')
@@ -301,7 +326,7 @@ func updateSkripsi(s *SkripsiList, n int, idx int) {
 			}
 			fmt.Println("⚠︎ Nama Dosen hanya boleh huruf!")
 		}
-	case 5:
+	case 6:
 		for {
 			fmt.Print("⏾ Update Status Kelulusan (1=lulus, 0=belum): ")
 			input, _ = reader.ReadString('\n')
@@ -322,7 +347,7 @@ func updateSkripsi(s *SkripsiList, n int, idx int) {
 				s[j].Author.IsGraduated = s[idx].Author.IsGraduated
 			}
 		}
-	case 6:
+	case 7:
 		return
 	default:
 		for {
@@ -369,18 +394,18 @@ func printSkripsi(s SkripsiList, n int) {
 
 	var i int
 	var status string
-	fmt.Println("✦==============================================================================================================================================✦")
-	fmt.Printf("✦ %-5s || %-35s || %-15s || %-25s || %-25s || %-15s ✦\n", "TAHUN", "JUDUL SKRIPSI", "NIM", "NAMA", "DOSEN PEMBIMBING", "STATUS")
-	fmt.Println("✦==============================================================================================================================================✦")
+	fmt.Println("✦=======================================================================================================================================================================✦")
+	fmt.Printf("✦ %-5s || %-35s || %-25s || %-15s || %-25s || %-25s || %-15s ✦\n", "TAHUN", "JUDUL SKRIPSI", "TOPIK PENELITIAN", "NIM", "NAMA", "DOSEN PEMBIMBING", "STATUS")
+	fmt.Println("✦=======================================================================================================================================================================✦")
 	for i = 0; i < n; i++ {
 		if s[i].Author.IsGraduated {
 			status = "Lulus"
 		} else {
 			status = "Belum lulus"
 		}
-		fmt.Printf("✦ %-5d || %-35s || %-15s || %-25s || %-25s || %-15s ✦\n", s[i].Year, s[i].Title, s[i].Author.NIM, s[i].Author.Name, s[i].Author.DosBing, status)
+		fmt.Printf("✦ %-5d || %-35s || %-25s || %-15s || %-25s || %-25s || %-15s ✦\n", s[i].Year, s[i].Title, s[i].Topic, s[i].Author.NIM, s[i].Author.Name, s[i].Author.DosBing, status)
 	}
-	fmt.Println("✦==============================================================================================================================================✦")
+	fmt.Println("✦=======================================================================================================================================================================✦")
 }
 
 // Prosedur untuk menampilkan (cetak) satu data skripsi
@@ -391,11 +416,11 @@ func singlePrint(s Skripsi) {
 	} else {
 		status = "Belum lulus"
 	}
-	fmt.Println("✦==============================================================================================================================================✦")
-	fmt.Printf("✦ %-5s || %-35s || %-15s || %-25s || %-25s || %-15s ✦\n", "TAHUN", "JUDUL SKRIPSI", "NIM", "NAMA", "DOSEN PEMBIMBING", "STATUS")
-	fmt.Println("✦==============================================================================================================================================✦")
-	fmt.Printf("✦ %-5d || %-35s || %-15s || %-25s || %-25s || %-15s ✦\n", s.Year, s.Title, s.Author.NIM, s.Author.Name, s.Author.DosBing, status)
-	fmt.Println("✦==============================================================================================================================================✦")
+	fmt.Println("✦=======================================================================================================================================================================✦")
+	fmt.Printf("✦ %-5s || %-35s || %-25s || %-15s || %-25s || %-25s || %-15s ✦\n", "TAHUN", "JUDUL SKRIPSI", "TOPIK PENELITIAN", "NIM", "NAMA", "DOSEN PEMBIMBING", "STATUS")
+	fmt.Println("✦=======================================================================================================================================================================✦")
+	fmt.Printf("✦ %-5d || %-35s || %-25s || %-15s || %-25s || %-25s || %-15s ✦\n", s.Year, s.Title, s.Topic, s.Author.NIM, s.Author.Name, s.Author.DosBing, status)
+	fmt.Println("✦=======================================================================================================================================================================✦")
 }
 
 // Prosedur untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan sequential search
@@ -525,7 +550,7 @@ func sortSkripsiInsertion(s *SkripsiList, n int, sortBy string, sortType string)
 
 // Prosedur untuk menampilkan statistik skripsi, seperti jumlah skripsi per tahun, jumlah skripsi yang lulus, dll
 func statisticSkripsi(s SkripsiList, n int) {
-	var CountPerYear [nMax]int
+	var CountPerYear [nYear]int
 	var CountGraduated int
 	for i := 0; i < n; i++ {
 		CountPerYear[s[i].Year]++
@@ -537,7 +562,7 @@ func statisticSkripsi(s SkripsiList, n int) {
 	fmt.Printf("\n✦%-22s✦", "STATISTIK")
 	fmt.Println("✦================================✦")
 	fmt.Println("Jumlah skripsi pertahun")
-	for year := 0; year < nMax; year++ {
+	for year := 0; year < 2026; year++ {
 		if CountPerYear[year] > 0 {
 			fmt.Printf("%d : %d skripsi\n", year, CountPerYear[year])
 		}
