@@ -89,6 +89,20 @@ func isValidYear(s string) bool {
 	return true
 }
 
+// Fungsi untuk mengecek apakah input adalah angka dan berada di range menu valid
+func isValidMenuChoice(input string, min int, max int) bool {
+	if !isNumber(input) {
+		return false
+	}
+
+	var choice int
+	fmt.Sscanf(input, "%d", &choice)
+	if choice >= min && choice <= max {
+		return true
+	}
+	return false
+}
+
 func sequentialContains(text, keyword string) bool {
 	text = strings.ToLower(text)
 	keyword = strings.ToLower(keyword)
@@ -146,22 +160,33 @@ func compareSkripsi(a, b Skripsi, sortBy, sortType string) bool {
 	isAsc := sortType == "asc"
 	switch sortBy {
 	case "name":
+		nameA := strings.ToLower(a.Author.Name)
+		nameB := strings.ToLower(b.Author.Name)
 		if isAsc {
-			return a.Author.Name < b.Author.Name
+			return nameA < nameB
 		}
-		return a.Author.Name > b.Author.Name
+		return nameA > nameB
 	case "year":
 		if isAsc {
 			return a.Year < b.Year
 		}
 		return a.Year > b.Year
 	case "title":
+		titleA := strings.ToLower(a.Title)
+		titleB := strings.ToLower(b.Title)
 		if isAsc {
-			return a.Title < b.Title
+			return titleA < titleB
 		}
-		return a.Title > b.Title
+		return titleA > titleB
 	}
 	return false
+}
+
+func getStatusString(isGraduated bool) string {
+	if isGraduated {
+		return "Lulus"
+	}
+	return "Belum"
 }
 
 // End of Helper Functions
@@ -170,8 +195,10 @@ func compareSkripsi(a, b Skripsi, sortBy, sortType string) bool {
 // Prosedur untuk menambah data skripsi beserta data mahasiswa yang terkait
 func addSkripsi(s *SkripsiList, n *int) {
 	var s1 Skripsi
-	var addition, start, end int
+	var addition, start, end, j int
 	var input string
+	var found bool = false
+
 	fmt.Println()
 	fmt.Println("✦===========================✦")
 	fmt.Printf("%-5s%-23s%-5s\n", "✦", "Tambah Data Skripsi", "✦")
@@ -239,7 +266,13 @@ func addSkripsi(s *SkripsiList, n *int) {
 			fmt.Println("⚠︎ Nama dosen hanya boleh huruf!")
 		}
 		s1.Author.IsGraduated = false
-		s[i] = s1
+		for j < *n && !found {
+			if s[j].Author.NIM == s1.Author.NIM {
+				s1.Author.IsGraduated = s[j].Author.IsGraduated
+				found = true
+			}
+			j++
+		}
 	}
 	*n = end
 	fmt.Println("\n⌯⌲⌲ Data Berhasil Ditambahkan!")
@@ -248,12 +281,9 @@ func addSkripsi(s *SkripsiList, n *int) {
 
 // Fungsi untuk mencari Index skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan sequential search
 func getSkripsiIdx(s SkripsiList, n int, keyword string) int {
-	lowerKeyword := strings.ToLower(keyword)
 	for i := 0; i < n; i++ {
-		lowerTitle := strings.ToLower(s[i].Title)
-		lowerName := strings.ToLower(s[i].Author.Name)
-		if sequentialContains(lowerTitle, lowerKeyword) || sequentialContains(lowerName, lowerKeyword) {
-			// bukan keyword tapi harus exact match, ini hanya handling just in case ada spasi di depan/belakang judul yang diketik
+		// Fungsi ini bukan keyword saja tapi harus exact match, "contains" hanya handling just in case ada spasi di depan/belakang judul yang diketik
+		if sequentialContains(s[i].Title, keyword) || sequentialContains(s[i].Author.Name, keyword) {
 			return i
 		}
 	}
@@ -268,6 +298,7 @@ func updateSkripsi(s *SkripsiList, n int, idx int) {
 	fmt.Println("✦===========================✦")
 	fmt.Printf("%-5s%-23s%-5s\n", "✦", "Edit Data Skripsi", "✦")
 	fmt.Println("✦===========================✦")
+	fmt.Println("0. Kembali ke Menu Utama")
 	fmt.Println("1. Judul Skripsi")
 	fmt.Println("2. Topik Skripsi")
 	fmt.Println("3. Tahun Skripsi")
@@ -277,15 +308,16 @@ func updateSkripsi(s *SkripsiList, n int, idx int) {
 	fmt.Println("7. Kembali")
 	for {
 		input = readInput("╰┈➤ˎˊ˗Masukkan pilihan: ")
-		if isNumber(input) {
+		if isValidMenuChoice(input, 0, 7) {
 			fmt.Sscanf(input, "%d", &choice)
 			break
 		}
-
-		fmt.Println("⚠︎ Pilihan harus angka!")
+		fmt.Println("⚠︎ Pilihan harus berupa angka pada rentang 0 sampai 7!")
 	}
 
 	switch choice {
+	case 0:
+		return
 	case 1:
 		fmt.Println("⛧ Judul Sebelumnya: ", s[idx].Title)
 		input = readInput("╰•➤ Masukkan Judul Skripsi baru: ")
@@ -358,15 +390,6 @@ func updateSkripsi(s *SkripsiList, n int, idx int) {
 		}
 	case 7:
 		return
-	default:
-		for {
-			input = readInput("╰┈➤ˎˊ˗Masukkan pilihan: ")
-			if isNumber(input) {
-				fmt.Sscanf(input, "%d", &choice)
-				break
-			}
-			fmt.Println("⚠︎ Pilihan harus angka!")
-		}
 	}
 	fmt.Println("⌯⌲⌲ Data Berhasil Diperbarui!")
 	fmt.Println("Data Sekarang:")
@@ -410,11 +433,7 @@ func printSkripsi(s SkripsiList, n int) {
 	fmt.Printf("✦ %-5s | %-52s | %-23s | %-7s | %-15s | %-23s | %-5s✦\n", "TAHUN", "JUDUL SKRIPSI", "TOPIK", "NIM", "NAMA", "DOSBING", "STATUS")
 	fmt.Println("✦======================================================================================================================================================✦")
 	for i = 0; i < n; i++ {
-		if s[i].Author.IsGraduated {
-			status = "Lulus"
-		} else {
-			status = "Belum"
-		}
+		status = getStatusString(s[i].Author.IsGraduated)
 		fmt.Printf("✦ %-5d | %-52s | %-23s | %-7s | %-15s | %-23s | %-5s ✦\n", s[i].Year, s[i].Title, s[i].Topic, s[i].Author.NIM, s[i].Author.Name, s[i].Author.DosBing, status)
 	}
 	fmt.Println("✦======================================================================================================================================================✦")
@@ -425,11 +444,7 @@ func printSkripsi(s SkripsiList, n int) {
 func singlePrint(s Skripsi) {
 	fmt.Println()
 	var status string
-	if s.Author.IsGraduated {
-		status = "Lulus"
-	} else {
-		status = "Belum"
-	}
+	status = getStatusString(s.Author.IsGraduated)
 	fmt.Println("✦==================================================✦")
 	fmt.Printf("✦ TAHUN: %d\n", s.Year)
 	fmt.Printf("✦ JUDUL: %s\n", s.Title)
@@ -518,10 +533,10 @@ func statisticSkripsi(s SkripsiList, n int) {
 	fmt.Println("✦===============================✦")
 	fmt.Printf("%-7s %-23s %-5s\n", "✦", "STATISTIK SKRIPSI", "✦")
 	fmt.Println("✦===============================✦")
-	fmt.Println("Jumlah skripsi pertahun")
+	fmt.Println("Jumlah Skripsi per tahun:")
 	for year := 0; year <= 2026; year++ {
 		if CountPerYear[year] > 0 {
-			fmt.Printf("%d : %d Skripsi\n", year, CountPerYear[year])
+			fmt.Printf("➯ %d : %d Skripsi\n", year, CountPerYear[year])
 		}
 	}
 	fmt.Printf("Jumlah Skripsi Lulus: %d\n", CountGraduated)
@@ -538,8 +553,8 @@ func main() {
 	var s SkripsiList
 
 	// dummy data testing (temp)
-	// copy(s[:], dummySkripsi)
-	// n = len(dummySkripsi) jika testing pakai dummy data
+	copy(s[:], dummySkripsi)
+	n = len(dummySkripsi) // jika testing pakai dummy data
 	// n = 0 jika tidak testing pakai dummy data
 
 	for {
@@ -554,15 +569,11 @@ func main() {
 		fmt.Println("6. Keluar")
 		for {
 			input = readInput("╰┈➤ˎˊ˗Masukkan pilihan: ")
-			if isNumber(input) {
+			if isValidMenuChoice(input, 1, 6) {
 				fmt.Sscanf(input, "%d", &mainChoice)
 				break
 			}
-
-			fmt.Println("⚠︎ Pilihan harus angka!")
-		}
-		if mainChoice == 6 {
-			return
+			fmt.Println("⚠︎ Pilihan harus berupa angka pada rentang 1 sampai 6!")
 		}
 
 		switch mainChoice {
@@ -577,17 +588,16 @@ func main() {
 			fmt.Println("3. Hapus Skripsi")
 			for {
 				input = readInput("╰┈➤ˎˊ˗Masukkan pilihan: ")
-				if isNumber(input) {
+				if isValidMenuChoice(input, 0, 3) {
 					fmt.Sscanf(input, "%d", &subChoice)
 					break
 				}
+				fmt.Println("⚠︎ Pilihan harus berupa angka pada rentang 0 sampai 3!")
+			}
 
-				fmt.Println("⚠︎ Pilihan harus angka!")
-			}
-			if subChoice == 0 {
-				continue
-			}
 			switch subChoice {
+			case 0:
+				continue
 			case 1:
 				addSkripsi(&s, &n)
 			case 2:
@@ -606,8 +616,6 @@ func main() {
 					continue
 				}
 				deleteSkripsi(&s, &n, idx)
-			default:
-				continue
 			}
 		case 2:
 			fmt.Println()
@@ -619,25 +627,21 @@ func main() {
 			fmt.Println("2. Pencarian Binary")
 			for {
 				input = readInput("╰┈➤ˎˊ˗Masukkan pilihan: ")
-				if isNumber(input) {
+				if isValidMenuChoice(input, 0, 2) {
 					fmt.Sscanf(input, "%d", &subChoice)
 					break
 				}
-
-				fmt.Println("⚠︎ Pilihan harus angka!")
-			}
-			if subChoice == 0 {
-				continue
+				fmt.Println("⚠︎ Pilihan harus berupa angka 0, 1, atau 2!")
 			}
 			switch subChoice {
+			case 0:
+				continue
 			case 1:
 				keyword = readInput("⪼---➢ Masukkan keyword pencarian: ")
 				findSkripsiSequential(s, n, keyword)
 			case 2:
 				keyword = readInput("⪼---➢ Masukkan Judul/Nama Mahasiswa yang akan dicari: ")
 				findSkripsiBinary(s, n, keyword)
-			default:
-				continue
 			}
 		case 3:
 			fmt.Println()
@@ -649,64 +653,60 @@ func main() {
 			fmt.Println("2. Insertion Sort")
 			for {
 				input = readInput("╰┈➤ˎˊ˗Masukkan pilihan: ")
-				if isNumber(input) {
+				if isValidMenuChoice(input, 0, 2) {
 					fmt.Sscanf(input, "%d", &subChoice)
 					break
 				}
-
-				fmt.Println("⚠︎ Pilihan harus angka!")
+				fmt.Println("⚠︎ Pilihan harus berupa angka 0, 1, atau 2!")
 			}
+
 			if subChoice == 0 {
 				continue
 			}
-			switch subChoice {
-			// add based on title sekalian biar ga nganggur
-			case 1:
+
+			for {
 				sortBy = readInput("⪼---➢ Masukkan tipe pengurutan (name/year/title): ")
-				switch sortBy {
-				case "name":
-					by = "Nama Penulis"
-				case "year":
-					by = "Tahun"
-				case "title":
-					by = "Judul Penelitian"
+				// based on title sekalian biar ga nganggur
+				if sortBy == "name" || sortBy == "year" || sortBy == "title" {
+					break
 				}
+				fmt.Println("⚠︎ Pilihan hanya boleh 'name', 'year', atau 'title'!")
+			}
+			switch sortBy {
+			case "name":
+				by = "Nama Penulis"
+			case "year":
+				by = "Tahun"
+			case "title":
+				by = "Judul Penelitian"
+			}
+
+			for {
 				sortType = readInput("⪼---➢ Masukkan tipe pengurutan (asc/desc): ")
-				if sortType == "asc" {
-					tipe = "Ascending"
-				} else {
-					tipe = "Descending"
+				if sortType == "asc" || sortType == "desc" {
+					break
 				}
+				fmt.Println("⚠︎ Pilihan hanya boleh 'asc' atau 'desc'!")
+			}
+
+			if sortType == "asc" {
+				tipe = "Ascending"
+			} else {
+				tipe = "Descending"
+			}
+
+			switch subChoice {
+			case 1:
 				sortSkripsiSelection(&s, n, sortBy, sortType)
 				fmt.Printf("\nPengurutan Skripsi Menggunakan Selection Sort Berdasarkan %s secara %s:\n", by, tipe)
 				printSkripsi(s, n)
 			case 2:
-				sortBy = readInput("⪼---➢ Masukkan tipe pengurutan (name/year/title): ")
-				switch sortBy {
-				case "name":
-					by = "Nama Penulis"
-				case "year":
-					by = "Tahun"
-				case "title":
-					by = "Judul Penelitian"
-				}
-				sortType = readInput("⪼---➢ Masukkan tipe pengurutan (asc/desc): ")
-				if sortType == "asc" {
-					tipe = "Ascending"
-				} else {
-					tipe = "Descending"
-				}
 				sortSkripsiInsertion(&s, n, sortBy, sortType)
 				fmt.Printf("\nPengurutan Skripsi Menggunakan Insertion Sort Berdasarkan %s secara %s:\n", by, tipe)
 				printSkripsi(s, n)
-			default:
-				continue
 			}
 		case 4:
 			fmt.Println()
-			fmt.Println("✦===========================✦")
-			fmt.Printf("%-5s%-23s%-5s\n", "✦", "Statistik Skripsi", "✦")
-			fmt.Println("✦===========================✦")
 			statisticSkripsi(s, n)
 			continue
 		case 5:
@@ -714,9 +714,6 @@ func main() {
 			continue
 		case 6:
 			return
-		default:
-			fmt.Println("⚠︎ Pilihan harus angka!")
-			continue
 		}
 	}
 }
