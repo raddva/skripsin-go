@@ -33,6 +33,10 @@ Aplikasi mengelola beberapa entitas data penting, antara lain:
 ```bash
 go run main.go
 ```
+5. Jika ingin menjalankan program dengan dummy data, lakukan dengan:
+```bash
+go run main.go dummy.go
+```
 
 ## Peranan Pengguna
 * Staf Administrasi: Bertanggung jawab mengelola input data mahasiswa dan status kelulusan.  

@@ -537,6 +537,11 @@ func main() {
 	var keyword, sortBy, sortType, input, by, tipe string
 	var s SkripsiList
 
+	// dummy data testing (temp)
+	// copy(s[:], dummySkripsi)
+	// n = len(dummySkripsi) jika testing pakai dummy data
+	// n = 0 jika tidak testing pakai dummy data
+
 	for {
 		fmt.Println("✦================================================================✦")
 		fmt.Printf("%-5s%-60s%-5s\n", "✦", "SkripsIn - Sistem Informasi Inventaris Dokumen Skripsi", "✦")
