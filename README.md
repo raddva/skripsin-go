@@ -31,11 +31,7 @@ Aplikasi mengelola beberapa entitas data penting, antara lain:
 3. Buka terminal di direktori proyek.
 4. Jalankan perintah berikut:
 ```bash
-go run main.go
-```
-5. Jika ingin menjalankan program dengan dummy data, lakukan dengan:
-```bash
-go run main.go dummy.go
+go run .
 ```
 
 ## Peranan Pengguna
