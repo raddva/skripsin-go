@@ -12,75 +12,83 @@ func AddSkripsi(s *SkripsiList, n *int) {
 	var s1 Skripsi
 	var addition, start, end, j int
 	var input string
-	var found bool = false
+	var found bool
 
 	fmt.Println()
 	fmt.Println("✦===========================✦")
 	fmt.Printf("%-5s%-23s%-5s\n", "✦", "Tambah Data Skripsi", "✦")
 	fmt.Println("✦===========================✦")
-	for {
+
+	input = ReadInput("Jumlah Skripsi yang akan ditambahkan: ")
+	isValidAdd := IsNumber(input)
+	for !isValidAdd {
+		fmt.Println("⚠︎ Input harus angka!")
 		input = ReadInput("Jumlah Skripsi yang akan ditambahkan: ")
-		if IsNumber(input) {
-			fmt.Sscanf(input, "%d", &addition)
-			if *n+addition > len(s) {
-				fmt.Println("⚠︎ Kapasitas data penuh!")
-				return
-			}
-			break
-		} else {
-			fmt.Println("⚠︎ Input harus angka!")
-		}
+		isValidAdd = IsNumber(input)
+	}
+
+	fmt.Sscanf(input, "%d", &addition)
+	if *n+addition > len(*s) {
+		fmt.Println("⚠︎ Kapasitas data penuh!")
+		return
 	}
 
 	start = *n
 	end = start + addition
 	for i := start; i < end; i++ {
 		fmt.Printf("\nSkripsi %d\n", i+1)
-		for {
-			input = ReadInput("Tahun: ")
-			if IsValidYear(input) {
-				fmt.Sscanf(input, "%d", &s1.Year)
-				break
-			}
+
+		input = ReadInput("Tahun: ")
+		isValidYear := IsValidYear(input)
+		for !isValidYear {
 			fmt.Println("⚠︎ Tahun harus valid!")
+			input = ReadInput("Tahun: ")
+			isValidYear = IsValidYear(input)
 		}
+		fmt.Sscanf(input, "%d", &s1.Year)
+
 		input = ReadInput("Judul: ")
 		s1.Title = input
-		for {
-			input = ReadInput("Topik Penelitian: ")
-			if IsAlpha(input) {
-				s1.Topic = input
-				break
-			}
+
+		input = ReadInput("Topik Penelitian: ")
+		isValidTopic := IsAlpha(input)
+		for !isValidTopic {
 			fmt.Println("⚠︎ Topik Penelitian hanya boleh huruf!")
+			input = ReadInput("Topik Penelitian: ")
+			isValidTopic = IsAlpha(input)
 		}
-		for {
-			input = ReadInput("NIM Mahasiswa: ")
-			if IsNumber(input) {
-				s1.Author.NIM = input
-				break
-			}
+		s1.Topic = input
+
+		input = ReadInput("NIM Mahasiswa: ")
+		isValidNIM := IsNumber(input)
+		for !isValidNIM {
 			fmt.Println("⚠︎ NIM hanya boleh angka!")
+			input = ReadInput("NIM Mahasiswa: ")
+			isValidNIM = IsNumber(input)
 		}
+		s1.Author.NIM = input
 
-		for {
-			input = ReadInput("Nama Mahasiswa: ")
-			if IsAlpha(input) {
-				s1.Author.Name = input
-				break
-			}
+		input = ReadInput("Nama Mahasiswa: ")
+		isValidName := IsAlpha(input)
+		for !isValidName {
 			fmt.Println("⚠︎ Nama hanya boleh huruf!")
+			input = ReadInput("Nama Mahasiswa: ")
+			isValidName = IsAlpha(input)
 		}
+		s1.Author.Name = input
 
-		for {
-			input = ReadInput("Dosen Pembimbing: ")
-			if IsAlpha(input) {
-				s1.Author.DosBing = input
-				break
-			}
+		input = ReadInput("Dosen Pembimbing: ")
+		isValidDosbing := IsAlpha(input)
+		for !isValidDosbing {
 			fmt.Println("⚠︎ Nama dosen hanya boleh huruf!")
+			input = ReadInput("Dosen Pembimbing: ")
+			isValidDosbing = IsAlpha(input)
 		}
+		s1.Author.DosBing = input
+
 		s1.Author.IsGraduated = false
+		j = 0
+		found = false
 		for j < *n && !found {
 			if s[j].Author.NIM == s1.Author.NIM {
 				s1.Author.IsGraduated = s[j].Author.IsGraduated
@@ -122,14 +130,15 @@ func UpdateSkripsi(s *SkripsiList, n int, idx int) {
 	fmt.Println("5. Dosen Pembimbing Skripsi")
 	fmt.Println("6. Status Kelulusan")
 	fmt.Println("7. Kembali")
-	for {
-		input = ReadInput("╰┈➤Masukkan pilihan: ")
-		if IsValidMenuChoice(input, 0, 7) {
-			fmt.Sscanf(input, "%d", &choice)
-			break
-		}
+
+	input = ReadInput("╰┈➤Masukkan pilihan: ")
+	isValidMenu := IsValidMenuChoice(input, 0, 7)
+	for !isValidMenu {
 		fmt.Println("⚠︎ Pilihan harus berupa angka pada rentang 0 sampai 7!")
+		input = ReadInput("╰┈➤Masukkan pilihan: ")
+		isValidMenu = IsValidMenuChoice(input, 0, 7)
 	}
+	fmt.Sscanf(input, "%d", &choice)
 
 	switch choice {
 	case 0:
@@ -139,64 +148,67 @@ func UpdateSkripsi(s *SkripsiList, n int, idx int) {
 		input = ReadInput("╰•➤ Masukkan Judul Skripsi baru: ")
 		s[idx].Title = strings.TrimSpace(input)
 	case 2:
-		for {
-			input = ReadInput("╰•➤ Masukkan Topik Penelitian baru: ")
-			if IsAlpha(input) {
-				s[idx].Topic = input
-				break
-			}
+		input = ReadInput("╰•➤ Masukkan Topik Penelitian baru: ")
+		isValidTopic := IsAlpha(input)
+		for !isValidTopic {
 			fmt.Println("⚠︎ Topik Penelitian hanya boleh huruf!")
+			input = ReadInput("╰•➤ Masukkan Topik Penelitian baru: ")
+			isValidTopic = IsAlpha(input)
 		}
+		s[idx].Topic = input
 	case 3:
 		fmt.Println("⛧ Tahun Sebelumnya: ", s[idx].Year)
-		for {
-			input = ReadInput("╰•➤ Masukkan Tahun Skripsi baru: ")
-			if IsValidYear(input) {
-				fmt.Sscanf(input, "%d", &s[idx].Year)
-				break
-			}
+		input = ReadInput("╰•➤ Masukkan Tahun Skripsi baru: ")
+		isValidYear := IsValidYear(input)
+		for !isValidYear {
 			fmt.Println("⚠︎ Tahun harus valid!")
+			input = ReadInput("╰•➤ Masukkan Tahun Skripsi baru: ")
+			isValidYear = IsValidYear(input)
 		}
+		fmt.Sscanf(input, "%d", &s[idx].Year)
 	case 4:
 		fmt.Println("⛧ NIM Sebelumnya: ", s[idx].Author.NIM)
 		fmt.Println("⛧ Nama Penulis Sebelumnya: ", s[idx].Author.Name)
-		for {
-			input = ReadInput("╰•➤ Masukkan NIM Mahasiswa baru: ")
-			if IsNumber(input) {
-				s[idx].Author.NIM = input
-				break
-			}
+
+		input = ReadInput("╰•➤ Masukkan NIM Mahasiswa baru: ")
+		isValidNIM := IsNumber(input)
+		for !isValidNIM {
 			fmt.Println("⚠︎ NIM hanya boleh angka!")
+			input = ReadInput("╰•➤ Masukkan NIM Mahasiswa baru: ")
+			isValidNIM = IsNumber(input)
+		}
+		s[idx].Author.NIM = input
+
+		input = ReadInput("╰•➤ Masukkan Nama Mahasiswa baru: ")
+		isValidName := IsAlpha(input)
+		for !isValidName {
+			fmt.Println("⚠︎ Nama hanya boleh huruf!")
+			input = ReadInput("╰•➤ Masukkan Nama Mahasiswa baru: ")
+			isValidName = IsAlpha(input)
+		}
+		s[idx].Author.Name = input
+	case 5:
+		input = ReadInput("╰•➤ Masukkan Dosen Pembimbing baru: ")
+		isValidDosbing := IsAlpha(input)
+		for !isValidDosbing {
+			fmt.Println("⚠︎ Nama Dosen hanya boleh huruf!")
+			input = ReadInput("╰•➤ Masukkan Dosen Pembimbing baru: ")
+			isValidDosbing = IsAlpha(input)
+		}
+		s[idx].Author.DosBing = input
+	case 6:
+		input = ReadInput("⏾ Update Status Kelulusan (1=lulus, 0=belum): ")
+		isValidStatus := (input == "1" || input == "0")
+		for !isValidStatus {
+			fmt.Println("⚠︎ Hanya boleh input 1 atau 0!")
+			input = ReadInput("⏾ Update Status Kelulusan (1=lulus, 0=belum): ")
+			isValidStatus = (input == "1" || input == "0")
 		}
 
-		for {
-			input = ReadInput("╰•➤ Masukkan Nama Mahasiswa baru: ")
-			if IsAlpha(input) {
-				s[idx].Author.Name = input
-				break
-			}
-			fmt.Println("⚠︎ Nama hanya boleh huruf!")
-		}
-	case 5:
-		for {
-			input = ReadInput("╰•➤ Masukkan Dosen Pembimbing baru: ")
-			if IsAlpha(input) {
-				s[idx].Author.DosBing = input
-				break
-			}
-			fmt.Println("⚠︎ Nama Dosen hanya boleh huruf!")
-		}
-	case 6:
-		for {
-			input = ReadInput("⏾ Update Status Kelulusan (1=lulus, 0=belum): ")
-			if input == "1" {
-				s[idx].Author.IsGraduated = true
-				break
-			} else if input == "0" {
-				s[idx].Author.IsGraduated = false
-				break
-			}
-			fmt.Println("⚠︎ Hanya boleh input 1 atau 0!")
+		if input == "1" {
+			s[idx].Author.IsGraduated = true
+		} else {
+			s[idx].Author.IsGraduated = false
 		}
 
 		for j := 0; j < n; j++ {

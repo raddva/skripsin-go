@@ -17,12 +17,12 @@ func SequentialContains(text, keyword string) bool {
 
 	for i := 0; i <= nText-nKey; i++ {
 		match := true
-		for j := 0; j < nKey; j++ {
+		for j := 0; j < nKey && match; j++ {
 			if text[i+j] != keyword[j] {
 				match = false
-				break
 			}
 		}
+
 		if match {
 			return true
 		}
