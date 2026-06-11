@@ -36,7 +36,7 @@ func AddSkripsi(s *SkripsiList, n *int) {
 	start = *n
 	end = start + addition
 	for i := start; i < end; i++ {
-		fmt.Printf("\nSkripsi %d\n", i+1)
+		fmt.Printf("\nSkripsi ke-%d\n", i+1)
 
 		input = ReadInput("Tahun: ")
 		isValidYear := IsValidYear(input)
@@ -227,6 +227,7 @@ func UpdateSkripsi(s *SkripsiList, n int, idx int) {
 
 // Prosedur untuk menghapus data skripsi berdasarkan Index
 func DeleteSkripsi(s *SkripsiList, n *int, idx int) {
+	var confirm, status string
 	fmt.Println()
 	if *n == 0 {
 		fmt.Println("╔══════════════════════════════════════════════╗")
@@ -235,12 +236,30 @@ func DeleteSkripsi(s *SkripsiList, n *int, idx int) {
 		return
 	}
 
-	fmt.Println("╔══════════════════════════════════════════════╗")
-	fmt.Printf("║ %-42s ║\n", "Hapus Data Skripsi")
-	fmt.Println("╚═════════════════════════════════════════════╝")
+	status = GetStatusString(s[idx].Author.IsGraduated)
+	fmt.Println("╔══════════════════════════════════════════════════════════════════════════════════════════════╗")
+	fmt.Printf("║ %-92s ║\n", "DATA YANG AKAN DIHAPUS")
+	fmt.Println("╠══════════════════════════════════════════════════════════════════════════════════════════════╣")
+	fmt.Printf("║ %-20s : %-69d ║\n", "TAHUN", s[idx].Year)
+	fmt.Printf("║ %-20s : %-69s ║\n", "JUDUL", s[idx].Title)
+	fmt.Printf("║ %-20s : %-69s ║\n", "TOPIK", s[idx].Topic)
+	fmt.Printf("║ %-20s : %-69s ║\n", "NIM", s[idx].Author.NIM)
+	fmt.Printf("║ %-20s : %-69s ║\n", "NAMA", s[idx].Author.Name)
+	fmt.Printf("║ %-20s : %-69s ║\n", "DOSEN PEMBIMBING", s[idx].Author.DosBing)
+	fmt.Printf("║ %-20s : %-69s ║\n", "STATUS KELULUSAN", status)
+	fmt.Println("╚══════════════════════════════════════════════════════════════════════════════════════════════╝")
+
+	fmt.Print("\nYakin ingin menghapus data ini? (y/n): ")
+	fmt.Scanln(&confirm)
+	if confirm != "y" && confirm != "Y" {
+		fmt.Println("Penghapusan dibatalkan. Kembali ke menu.")
+		return
+	}
+
 	for i := idx; i < *n-1; i++ {
 		(*s)[i] = (*s)[i+1]
 	}
+
 	*n--
 	fmt.Println("⌯⌲⌲ Data Berhasil Dihapus!")
 	fmt.Println()

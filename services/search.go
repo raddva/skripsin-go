@@ -28,14 +28,14 @@ func FindSkripsiBinary(s SkripsiList, n int, keyword string) {
 	}
 
 	SortSkripsiInsertion(&tempList, n, "name", "asc")
-	idx := BinaryContains(tempList, n, keyword, "name")
+	idx := BinaryFind(tempList, n, keyword, "name")
 	if idx != -1 {
 		SinglePrint(tempList[idx])
 		return
 	}
 
 	SortSkripsiInsertion(&tempList, n, "title", "asc")
-	idx = BinaryContains(tempList, n, keyword, "title")
+	idx = BinaryFind(tempList, n, keyword, "title")
 	if idx != -1 {
 		SinglePrint(tempList[idx])
 		return

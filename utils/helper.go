@@ -30,7 +30,7 @@ func SequentialContains(text, keyword string) bool {
 	return false
 }
 
-func BinaryContains(s SkripsiList, n int, keyword string, searchBy string) int {
+func BinaryFind(s SkripsiList, n int, keyword string, searchBy string) int {
 	keyword = strings.ToLower(keyword)
 	left := 0
 	right := n - 1
