@@ -221,33 +221,21 @@ func UpdateSkripsi(s *SkripsiList, n int, idx int) {
 		return
 	}
 	fmt.Println("⌯⌲⌲ Data Berhasil Diperbarui!")
-	fmt.Println("Data Sekarang:")
-	SinglePrint(s[idx])
+	SinglePrint(s[idx], "DATA SKRIPSI YANG TELAH DIPERBARUI")
 }
 
 // Prosedur untuk menghapus data skripsi berdasarkan Index
 func DeleteSkripsi(s *SkripsiList, n *int, idx int) {
-	var confirm, status string
-	fmt.Println()
+	var confirm string
 	if *n == 0 {
+		fmt.Println()
 		fmt.Println("╔══════════════════════════════════════════════╗")
 		fmt.Printf("║ %-42s ║\n", "Data Skripsi Masih Kosong!")
 		fmt.Println("╚══════════════════════════════════════════════╝")
 		return
 	}
 
-	status = GetStatusString(s[idx].Author.IsGraduated)
-	fmt.Println("╔══════════════════════════════════════════════════════════════════════════════════════════════╗")
-	fmt.Printf("║ %-92s ║\n", "DATA YANG AKAN DIHAPUS")
-	fmt.Println("╠══════════════════════════════════════════════════════════════════════════════════════════════╣")
-	fmt.Printf("║ %-20s : %-69d ║\n", "TAHUN", s[idx].Year)
-	fmt.Printf("║ %-20s : %-69s ║\n", "JUDUL", s[idx].Title)
-	fmt.Printf("║ %-20s : %-69s ║\n", "TOPIK", s[idx].Topic)
-	fmt.Printf("║ %-20s : %-69s ║\n", "NIM", s[idx].Author.NIM)
-	fmt.Printf("║ %-20s : %-69s ║\n", "NAMA", s[idx].Author.Name)
-	fmt.Printf("║ %-20s : %-69s ║\n", "DOSEN PEMBIMBING", s[idx].Author.DosBing)
-	fmt.Printf("║ %-20s : %-69s ║\n", "STATUS KELULUSAN", status)
-	fmt.Println("╚══════════════════════════════════════════════════════════════════════════════════════════════╝")
+	SinglePrint(s[idx], "DATA YANG AKAN DIHAPUS")
 
 	fmt.Print("\nYakin ingin menghapus data ini? (y/n): ")
 	fmt.Scanln(&confirm)
@@ -292,18 +280,20 @@ func PrintSkripsi(s SkripsiList, n int) {
 }
 
 // Prosedur untuk menampilkan (cetak) satu data skripsi
-func SinglePrint(s Skripsi) {
+func SinglePrint(s Skripsi, title string) {
 	fmt.Println()
 	var status string
 	status = GetStatusString(s.Author.IsGraduated)
-	fmt.Println("╔════════════════════════════════════════════════════╗")
-	fmt.Printf("║ %-20s : %-25d ║\n", "TAHUN", s.Year)
-	fmt.Printf("║ %-20s : %-25s ║\n", "JUDUL", s.Title)
-	fmt.Printf("║ %-20s : %-25s ║\n", "TOPIK", s.Topic)
-	fmt.Printf("║ %-20s : %-25s ║\n", "NIM", s.Author.NIM)
-	fmt.Printf("║ %-20s : %-25s ║\n", "NAMA", s.Author.Name)
-	fmt.Printf("║ %-20s : %-25s ║\n", "DOSEN PEMBIMBING", s.Author.DosBing)
-	fmt.Printf("║ %-20s : %-25s ║\n", "STATUS KELULUSAN", status)
-	fmt.Println("╚════════════════════════════════════════════════════╝")
+	fmt.Println("╔══════════════════════════════════════════════════════════════════════════════════════════════╗")
+	fmt.Printf("║ %-92s ║\n", title)
+	fmt.Println("╠══════════════════════════════════════════════════════════════════════════════════════════════╣")
+	fmt.Printf("║ %-20s : %-69d ║\n", "TAHUN", s.Year)
+	fmt.Printf("║ %-20s : %-69s ║\n", "JUDUL", s.Title)
+	fmt.Printf("║ %-20s : %-69s ║\n", "TOPIK", s.Topic)
+	fmt.Printf("║ %-20s : %-69s ║\n", "NIM", s.Author.NIM)
+	fmt.Printf("║ %-20s : %-69s ║\n", "NAMA", s.Author.Name)
+	fmt.Printf("║ %-20s : %-69s ║\n", "DOSEN PEMBIMBING", s.Author.DosBing)
+	fmt.Printf("║ %-20s : %-69s ║\n", "STATUS KELULUSAN", status)
+	fmt.Println("╚══════════════════════════════════════════════════════════════════════════════════════════════╝")
 	fmt.Println()
 }

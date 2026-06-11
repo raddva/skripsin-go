@@ -1,5 +1,4 @@
-// disclaimer: kodingan masih berantakan dikit, nanti final dirapihin (insyaAllah)
-// ini komen bner komen manusia (saya)(nadya), bingung jelasinnyh ya gitulah pokonya
+// ini komen bner komen manusia (saya)(nadya), bingung jelasinnyh ya gitulah pokonya bukan ey ay
 package main
 
 import (
@@ -189,5 +188,3 @@ func main() {
 		}
 	}
 }
-
-// kelar kah min? belom sih bentar laporan blm

@@ -16,7 +16,12 @@ func FindSkripsiSequential(s SkripsiList, n int, keyword string) {
 			length++
 		}
 	}
-	PrintSkripsi(f, length)
+
+	if length == 0 {
+		fmt.Println("⚠︎ Data tidak ditemukan.")
+	} else {
+		PrintSkripsi(f, length)
+	}
 }
 
 // Prosedur untuk mencari id skripsi berdasarkan nama mahasiswa atau Judul Penelitian menggunakan binary search
@@ -30,14 +35,14 @@ func FindSkripsiBinary(s SkripsiList, n int, keyword string) {
 	SortSkripsiInsertion(&tempList, n, "name", "asc")
 	idx := BinaryFind(tempList, n, keyword, "name")
 	if idx != -1 {
-		SinglePrint(tempList[idx])
+		SinglePrint(tempList[idx], "DATA DITEMUKAN BERDASARKAN NAMA MAHASISWA")
 		return
 	}
 
 	SortSkripsiInsertion(&tempList, n, "title", "asc")
 	idx = BinaryFind(tempList, n, keyword, "title")
 	if idx != -1 {
-		SinglePrint(tempList[idx])
+		SinglePrint(tempList[idx], "DATA DITEMUKAN BERDASARKAN JUDUL SKRIPSI")
 		return
 	}
 	fmt.Println("⚠︎ Data tidak ditemukan. (Pastikan huruf kapital dan ejaan sama persis karena ini Binary Search).")
