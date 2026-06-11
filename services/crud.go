@@ -15,9 +15,9 @@ func AddSkripsi(s *SkripsiList, n *int) {
 	var found bool
 
 	fmt.Println()
-	fmt.Println("✦===========================✦")
-	fmt.Printf("%-5s%-23s%-5s\n", "✦", "Tambah Data Skripsi", "✦")
-	fmt.Println("✦===========================✦")
+	fmt.Println("╔════════════════════════════════════╗")
+	fmt.Printf("║ %-34s ║\n", "Tambah Data Skripsi")
+	fmt.Println("╚════════════════════════════════════╝")
 
 	input = ReadInput("Jumlah Skripsi yang akan ditambahkan: ")
 	isValidAdd := IsNumber(input)
@@ -119,23 +119,24 @@ func UpdateSkripsi(s *SkripsiList, n int, idx int) {
 	var choice int
 	var input string
 	fmt.Println()
-	fmt.Println("✦===========================✦")
-	fmt.Printf("%-5s%-23s%-5s\n", "✦", "Edit Data Skripsi", "✦")
-	fmt.Println("✦===========================✦")
-	fmt.Println("0. Kembali ke Menu Utama")
-	fmt.Println("1. Judul Skripsi")
-	fmt.Println("2. Topik Skripsi")
-	fmt.Println("3. Tahun Skripsi")
-	fmt.Println("4. Penulis Skripsi")
-	fmt.Println("5. Dosen Pembimbing Skripsi")
-	fmt.Println("6. Status Kelulusan")
-	fmt.Println("7. Kembali")
+	fmt.Println("╔════════════════════════════════════════════╗")
+	fmt.Printf("║ %-42s ║\n", "Edit Data Skripsi")
+	fmt.Println("╠════════════════════════════════════════════╣")
+	fmt.Printf("║ %-42s ║\n", "0. Kembali ke Menu Utama")
+	fmt.Printf("║ %-42s ║\n", "1. Judul Skripsi")
+	fmt.Printf("║ %-42s ║\n", "2. Topik Skripsi")
+	fmt.Printf("║ %-42s ║\n", "3. Tahun Skripsi")
+	fmt.Printf("║ %-42s ║\n", "4. Penulis Skripsi")
+	fmt.Printf("║ %-42s ║\n", "5. Dosen Pembimbing Skripsi")
+	fmt.Printf("║ %-42s ║\n", "6. Status Kelulusan")
+	fmt.Printf("║ %-42s ║\n", "7. Kembali")
+	fmt.Println("╚════════════════════════════════════════════╝")
 
-	input = ReadInput("╰┈➤Masukkan pilihan: ")
+	input = ReadInput("➜ Masukkan pilihan: ")
 	isValidMenu := IsValidMenuChoice(input, 0, 7)
 	for !isValidMenu {
 		fmt.Println("⚠︎ Pilihan harus berupa angka pada rentang 0 sampai 7!")
-		input = ReadInput("╰┈➤Masukkan pilihan: ")
+		input = ReadInput("➜ Masukkan pilihan: ")
 		isValidMenu = IsValidMenuChoice(input, 0, 7)
 	}
 	fmt.Sscanf(input, "%d", &choice)
@@ -228,15 +229,15 @@ func UpdateSkripsi(s *SkripsiList, n int, idx int) {
 func DeleteSkripsi(s *SkripsiList, n *int, idx int) {
 	fmt.Println()
 	if *n == 0 {
-		fmt.Println("✦===========================✦")
-		fmt.Printf("%-5s%-25s%-5s\n", "✦", "Data Skripsi Masih Kosong!", "✦")
-		fmt.Println("✦===========================✦")
+		fmt.Println("╔══════════════════════════════════════════════╗")
+		fmt.Printf("║ %-42s ║\n", "Data Skripsi Masih Kosong!")
+		fmt.Println("╚══════════════════════════════════════════════╝")
 		return
 	}
 
-	fmt.Println("✦===========================✦")
-	fmt.Printf("%-5s%-23s%-5s\n", "✦", "Hapus Data Skripsi", "✦")
-	fmt.Println("✦===========================✦")
+	fmt.Println("╔══════════════════════════════════════════════╗")
+	fmt.Printf("║ %-42s ║\n", "Hapus Data Skripsi")
+	fmt.Println("╚═════════════════════════════════════════════╝")
 	for i := idx; i < *n-1; i++ {
 		(*s)[i] = (*s)[i+1]
 	}
@@ -249,22 +250,25 @@ func DeleteSkripsi(s *SkripsiList, n *int, idx int) {
 func PrintSkripsi(s SkripsiList, n int) {
 	fmt.Println()
 	if n == 0 {
-		fmt.Println("✦===========================✦")
-		fmt.Println("    Data Skripsi Masih Kosong!   ")
-		fmt.Println("✦===========================✦")
+		fmt.Println("╔══════════════════════════════════════════════╗")
+		fmt.Printf("║ %-42s ║\n", "Data Skripsi Masih Kosong!")
+		fmt.Println("╚══════════════════════════════════════════════╝")
 		return
 	}
 
 	var i int
 	var status string
-	fmt.Println("✦======================================================================================================================================================✦")
-	fmt.Printf("✦ %-5s | %-52s | %-23s | %-7s | %-15s | %-23s | %-5s✦\n", "TAHUN", "JUDUL SKRIPSI", "TOPIK", "NIM", "NAMA", "DOSBING", "STATUS")
-	fmt.Println("✦======================================================================================================================================================✦")
+	fmt.Println("╔═══════╦══════════════════════════════════════════════════════╦═════════════════════════╦═════════╦═════════════════╦═════════════════════════╦═════════╗")
+	fmt.Printf(
+		"║ %-5s ║ %-52s ║ %-23s ║ %-7s ║ %-15s ║ %-23s ║ %-7s ║\n",
+		"TAHUN", "JUDUL SKRIPSI", "TOPIK", "NIM", "NAMA", "DOSBING", "STATUS",
+	)
+	fmt.Println("╠═══════╬══════════════════════════════════════════════════════╬═════════════════════════╬═════════╬═════════════════╬═════════════════════════╬═════════╣")
 	for i = 0; i < n; i++ {
 		status = GetStatusString(s[i].Author.IsGraduated)
-		fmt.Printf("✦ %-5d | %-52s | %-23s | %-7s | %-15s | %-23s | %-5s ✦\n", s[i].Year, s[i].Title, s[i].Topic, s[i].Author.NIM, s[i].Author.Name, s[i].Author.DosBing, status)
+		fmt.Printf("║ %-5d ║ %-52s ║ %-23s ║ %-7s ║ %-15s ║ %-23s ║ %-7s ║\n", s[i].Year, s[i].Title, s[i].Topic, s[i].Author.NIM, s[i].Author.Name, s[i].Author.DosBing, status)
 	}
-	fmt.Println("✦======================================================================================================================================================✦")
+	fmt.Println("╚═══════╩══════════════════════════════════════════════════════╩═════════════════════════╩═════════╩═════════════════╩═════════════════════════╩═════════╝")
 	fmt.Println()
 }
 
@@ -273,14 +277,14 @@ func SinglePrint(s Skripsi) {
 	fmt.Println()
 	var status string
 	status = GetStatusString(s.Author.IsGraduated)
-	fmt.Println("✦==================================================✦")
-	fmt.Printf("✦ TAHUN: %d\n", s.Year)
-	fmt.Printf("✦ JUDUL: %s\n", s.Title)
-	fmt.Printf("✦ TOPIK: %s\n", s.Topic)
-	fmt.Printf("✦ NIM: %s\n", s.Author.NIM)
-	fmt.Printf("✦ NAMA: %s\n", s.Author.Name)
-	fmt.Printf("✦ DOSEN PEMBIMBING: %s\n", s.Author.DosBing)
-	fmt.Printf("✦ STATUS KELULUSAN: %s\n", status)
-	fmt.Println("✦==================================================✦")
+	fmt.Println("╔════════════════════════════════════════════════════╗")
+	fmt.Printf("║ %-20s : %-25d ║\n", "TAHUN", s.Year)
+	fmt.Printf("║ %-20s : %-25s ║\n", "JUDUL", s.Title)
+	fmt.Printf("║ %-20s : %-25s ║\n", "TOPIK", s.Topic)
+	fmt.Printf("║ %-20s : %-25s ║\n", "NIM", s.Author.NIM)
+	fmt.Printf("║ %-20s : %-25s ║\n", "NAMA", s.Author.Name)
+	fmt.Printf("║ %-20s : %-25s ║\n", "DOSEN PEMBIMBING", s.Author.DosBing)
+	fmt.Printf("║ %-20s : %-25s ║\n", "STATUS KELULUSAN", status)
+	fmt.Println("╚════════════════════════════════════════════════════╝")
 	fmt.Println()
 }

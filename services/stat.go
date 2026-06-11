@@ -15,16 +15,21 @@ func StatisticSkripsi(s SkripsiList, n int) {
 			CountGraduated++
 		}
 	}
-	fmt.Println("✦===============================✦")
-	fmt.Printf("%-7s %-23s %-5s\n", "✦", "STATISTIK SKRIPSI", "✦")
-	fmt.Println("✦===============================✦")
-	fmt.Println("Jumlah Skripsi per tahun:")
+	fmt.Println("╔═══════════════════════════════════════════╗")
+	fmt.Printf("║ %-41s ║\n", "STATISTIK SKRIPSI")
+	fmt.Println("╠═══════════════════════════════════════════╣")
+
+	fmt.Println("║ Jumlah Skripsi per tahun:                 ║")
 	for year := 0; year <= 2026; year++ {
 		if CountPerYear[year] > 0 {
-			fmt.Printf("➯ %d : %d Skripsi\n", year, CountPerYear[year])
+			fmt.Printf("║   ➜ %-6d : %-28d ║\n", year, CountPerYear[year])
 		}
 	}
-	fmt.Printf("Jumlah Skripsi Lulus: %d\n", CountGraduated)
-	fmt.Printf("Total Skripsi: %d\n", n)
+
+	fmt.Println("╠═══════════════════════════════════════════╣")
+	fmt.Printf("║ %-20s : %-18d ║\n", "Skripsi Lulus", CountGraduated)
+	fmt.Printf("║ %-20s : %-18d ║\n", "Total Skripsi", n)
+
+	fmt.Println("╚═══════════════════════════════════════════╝")
 	fmt.Println()
 }

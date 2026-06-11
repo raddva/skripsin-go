@@ -22,21 +22,22 @@ func main() {
 	isRunning := true // Flag loop
 
 	for isRunning {
-		fmt.Println("✦================================================================✦")
-		fmt.Printf("%-5s%-60s%-5s\n", "✦", "SkripsIn - Sistem Informasi Inventaris Dokumen Skripsi", "✦")
-		fmt.Println("✦================================================================✦")
-		fmt.Println("1. Kelola Data Skripsi")
-		fmt.Println("2. Pencarian Skripsi (Berdasarkan Nama Mahasiswa atau Judul Penelitian)")
-		fmt.Println("3. Pengurutan Skripsi")
-		fmt.Println("4. Statistik Skripsi")
-		fmt.Println("5. Tampilkan Semua Data Skripsi")
-		fmt.Println("6. Keluar")
+		fmt.Println("╔══════════════════════════════════════════════════════════════════════╗")
+		fmt.Printf("║ %-68s ║\n", "SkripsIn - Sistem Informasi Inventaris Dokumen Skripsi")
+		fmt.Println("╠══════════════════════════════════════════════════════════════════════╣")
+		fmt.Println("║ 1. Kelola Data Skripsi                                               ║")
+		fmt.Println("║ 2. Pencarian Skripsi                                                 ║")
+		fmt.Println("║ 3. Pengurutan Skripsi                                                ║")
+		fmt.Println("║ 4. Statistik Skripsi                                                 ║")
+		fmt.Println("║ 5. Tampilkan Semua Data Skripsi                                      ║")
+		fmt.Println("║ 6. Keluar                                                            ║")
+		fmt.Println("╚══════════════════════════════════════════════════════════════════════╝")
 
-		input = ReadInput("╰┈➤Masukkan pilihan: ")
+		input = ReadInput("➜ Masukkan pilihan: ")
 		isValidMain := IsValidMenuChoice(input, 1, 6)
 		for !isValidMain {
 			fmt.Println("⚠︎ Pilihan harus berupa angka pada rentang 1 sampai 6!")
-			input = ReadInput("╰┈➤Masukkan pilihan: ")
+			input = ReadInput("➜ Masukkan pilihan: ")
 			isValidMain = IsValidMenuChoice(input, 1, 6)
 		}
 		fmt.Sscanf(input, "%d", &mainChoice)
@@ -44,19 +45,20 @@ func main() {
 		switch mainChoice {
 		case 1:
 			fmt.Println()
-			fmt.Println("✦===========================✦")
-			fmt.Printf("%-5s%-23s%-5s\n", "✦", "Kelola Data Skripsi", "✦")
-			fmt.Println("✦===========================✦")
-			fmt.Println("0. Kembali ke Menu Utama")
-			fmt.Println("1. Tambah Skripsi")
-			fmt.Println("2. Update Skripsi")
-			fmt.Println("3. Hapus Skripsi")
+			fmt.Println("╔════════════════════════════════════╗")
+			fmt.Printf("║ %-34s ║\n", "Kelola Data Skripsi")
+			fmt.Println("╠════════════════════════════════════╣")
+			fmt.Println("║ 0. Kembali ke Menu Utama           ║")
+			fmt.Println("║ 1. Tambah Skripsi                  ║")
+			fmt.Println("║ 2. Update Skripsi                  ║")
+			fmt.Println("║ 3. Hapus Skripsi                   ║")
+			fmt.Println("╚════════════════════════════════════╝")
 
-			input = ReadInput("╰┈➤Masukkan pilihan: ")
+			input = ReadInput("➜ Masukkan pilihan: ")
 			isValidSub := IsValidMenuChoice(input, 0, 3)
 			for !isValidSub {
 				fmt.Println("⚠︎ Pilihan harus berupa angka pada rentang 0 sampai 3!")
-				input = ReadInput("╰┈➤Masukkan pilihan: ")
+				input = ReadInput("➜ Masukkan pilihan: ")
 				isValidSub = IsValidMenuChoice(input, 0, 3)
 			}
 			fmt.Sscanf(input, "%d", &subChoice)
@@ -73,6 +75,7 @@ func main() {
 					fmt.Println("Skripsi tidak ditemukan")
 				} else {
 					UpdateSkripsi(&s, n, idx)
+					fmt.Println()
 				}
 			case 3:
 				keyword = ReadInput("⪼---➢ Masukkan judul penelitian/nama mahasiswa yang akan dihapus: ")
@@ -86,18 +89,19 @@ func main() {
 
 		case 2:
 			fmt.Println()
-			fmt.Println("✦===========================✦")
-			fmt.Printf("%-5s%-23s%-5s\n", "✦", "Cari Skripsi", "✦")
-			fmt.Println("✦===========================✦")
-			fmt.Println("0. Kembali ke Menu Utama")
-			fmt.Println("1. Pencarian Sequential")
-			fmt.Println("2. Pencarian Binary")
+			fmt.Println("╔════════════════════════════════════╗")
+			fmt.Printf("║ %-34s ║\n", "Cari Skripsi")
+			fmt.Println("╠════════════════════════════════════╣")
+			fmt.Println("║ 0. Kembali ke Menu Utama           ║")
+			fmt.Println("║ 1. Pencarian Sequential            ║")
+			fmt.Println("║ 2. Pencarian Binary                ║")
+			fmt.Println("╚════════════════════════════════════╝")
 
-			input = ReadInput("╰┈➤Masukkan pilihan: ")
+			input = ReadInput("➜ Masukkan pilihan: ")
 			isValidSubSearch := IsValidMenuChoice(input, 0, 2)
 			for !isValidSubSearch {
 				fmt.Println("⚠︎ Pilihan harus berupa angka 0, 1, atau 2!")
-				input = ReadInput("╰┈➤Masukkan pilihan: ")
+				input = ReadInput("➜ Masukkan pilihan: ")
 				isValidSubSearch = IsValidMenuChoice(input, 0, 2)
 			}
 			fmt.Sscanf(input, "%d", &subChoice)
@@ -115,18 +119,19 @@ func main() {
 
 		case 3:
 			fmt.Println()
-			fmt.Println("✦===========================✦")
-			fmt.Printf("%-5s%-23s%-5s\n", "✦", "Urutkan Skripsi", "✦")
-			fmt.Println("✦===========================✦")
-			fmt.Println("0. Kembali ke Menu Utama")
-			fmt.Println("1. Selection Sort")
-			fmt.Println("2. Insertion Sort")
+			fmt.Println("╔════════════════════════════════════╗")
+			fmt.Printf("║ %-34s ║\n", "Urutkan Skripsi")
+			fmt.Println("╠════════════════════════════════════╣")
+			fmt.Println("║ 0. Kembali ke Menu Utama           ║")
+			fmt.Println("║ 1. Selection Sort                  ║")
+			fmt.Println("║ 2. Insertion Sort                  ║")
+			fmt.Println("╚════════════════════════════════════╝")
 
-			input = ReadInput("╰┈➤Masukkan pilihan: ")
+			input = ReadInput("➜ Masukkan pilihan: ")
 			isValidSubSort := IsValidMenuChoice(input, 0, 2)
 			for !isValidSubSort {
 				fmt.Println("⚠︎ Pilihan harus berupa angka 0, 1, atau 2!")
-				input = ReadInput("╰┈➤Masukkan pilihan: ")
+				input = ReadInput("➜ Masukkan pilihan: ")
 				isValidSubSort = IsValidMenuChoice(input, 0, 2)
 			}
 			fmt.Sscanf(input, "%d", &subChoice)
