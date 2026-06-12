@@ -13,12 +13,13 @@ func main() {
 	var mainChoice, subChoice, idx, n int
 	var keyword, sortBy, sortType, input, by, tipe string
 	var s SkripsiList
+	var isValidMain, isValidSub, isValidSubSearch, isValidSubSort, isRunning, isValidSortBy, isValidSortType bool
 
 	// dummy data testing (temp)
 	s, n = GetDummyData() // komen jika tidak pakai dummy data
 	// n = 0 // uncoment jika tidak testing pakai dummy data
 
-	isRunning := true // Flag loop
+	isRunning = true // Flag loop
 
 	for isRunning {
 		fmt.Println("╔══════════════════════════════════════════════════════════════════════╗")
@@ -33,7 +34,7 @@ func main() {
 		fmt.Println("╚══════════════════════════════════════════════════════════════════════╝")
 
 		input = ReadInput("➜ Masukkan pilihan: ")
-		isValidMain := IsValidMenuChoice(input, 1, 6)
+		isValidMain = IsValidMenuChoice(input, 1, 6)
 		for !isValidMain {
 			fmt.Println("⚠︎ Pilihan harus berupa angka pada rentang 1 sampai 6!")
 			input = ReadInput("➜ Masukkan pilihan: ")
@@ -54,7 +55,7 @@ func main() {
 			fmt.Println("╚════════════════════════════════════╝")
 
 			input = ReadInput("➜ Masukkan pilihan: ")
-			isValidSub := IsValidMenuChoice(input, 0, 3)
+			isValidSub = IsValidMenuChoice(input, 0, 3)
 			for !isValidSub {
 				fmt.Println("⚠︎ Pilihan harus berupa angka pada rentang 0 sampai 3!")
 				input = ReadInput("➜ Masukkan pilihan: ")
@@ -97,7 +98,7 @@ func main() {
 			fmt.Println("╚════════════════════════════════════╝")
 
 			input = ReadInput("➜ Masukkan pilihan: ")
-			isValidSubSearch := IsValidMenuChoice(input, 0, 2)
+			isValidSubSearch = IsValidMenuChoice(input, 0, 2)
 			for !isValidSubSearch {
 				fmt.Println("⚠︎ Pilihan harus berupa angka 0, 1, atau 2!")
 				input = ReadInput("➜ Masukkan pilihan: ")
@@ -127,7 +128,7 @@ func main() {
 			fmt.Println("╚════════════════════════════════════╝")
 
 			input = ReadInput("➜ Masukkan pilihan: ")
-			isValidSubSort := IsValidMenuChoice(input, 0, 2)
+			isValidSubSort = IsValidMenuChoice(input, 0, 2)
 			for !isValidSubSort {
 				fmt.Println("⚠︎ Pilihan harus berupa angka 0, 1, atau 2!")
 				input = ReadInput("➜ Masukkan pilihan: ")
@@ -137,7 +138,7 @@ func main() {
 
 			if subChoice != 0 {
 				sortBy = ReadInput("⪼---➢ Masukkan tipe pengurutan (name/year/title): ")
-				isValidSortBy := (sortBy == "name" || sortBy == "year" || sortBy == "title")
+				isValidSortBy = (sortBy == "name" || sortBy == "year" || sortBy == "title")
 				for !isValidSortBy {
 					fmt.Println("⚠︎ Pilihan hanya boleh 'name', 'year', atau 'title'!")
 					sortBy = ReadInput("⪼---➢ Masukkan tipe pengurutan (name/year/title): ")
@@ -154,7 +155,7 @@ func main() {
 				}
 
 				sortType = ReadInput("⪼---➢ Masukkan tipe pengurutan (asc/desc): ")
-				isValidSortType := (sortType == "asc" || sortType == "desc")
+				isValidSortType = (sortType == "asc" || sortType == "desc")
 				for !isValidSortType {
 					fmt.Println("⚠︎ Pilihan hanya boleh 'asc' atau 'desc'!")
 					sortType = ReadInput("⪼---➢ Masukkan tipe pengurutan (asc/desc): ")
